@@ -1,0 +1,27 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\Category;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
+
+class CategorySeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     */
+    public function run(): void
+    {
+        $categories = [
+            ['name' => 'Játék', 'description' => 'Videó játékok'],
+            ['name' => 'Szoftver', 'description' => 'Asztali alkalmazások'],
+            ['name' => 'Előfizetés', 'description' => 'Előfizetéses szolgáltatások'],
+            ['name' => 'Oktatás', 'description' => 'Oktatási anyagok'],
+        ];
+
+        foreach ($categories as $category) {
+            Category::create($category);
+        }
+    }
+}
