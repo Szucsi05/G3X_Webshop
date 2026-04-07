@@ -25,18 +25,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('products', function (Blueprint $table) {
-            // Visszaállítjuk az eredeti mezőket
-            $table->string('image')->nullable();
-            $table->string('platform')->nullable();
-            $table->string('genre')->nullable();
-            $table->string('category')->nullable();
-            $table->integer('release_year')->nullable();
-            $table->json('prices')->nullable();
-            
-            // Eltávolítjuk a kategória referenciát
-            $table->dropForeignKeyIfExists(['category_id']);
-            $table->dropColumn('category_id');
-        });
+        // Complex migration - rollback not supported for this migration
+        // To rollback, clear the database and run migrations from scratch
     }
 };

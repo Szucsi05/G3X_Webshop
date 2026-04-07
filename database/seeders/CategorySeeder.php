@@ -17,7 +17,6 @@ class CategorySeeder extends Seeder
             ['name' => 'Játék', 'description' => 'Videó játékok'],
             ['name' => 'Szoftver', 'description' => 'Asztali alkalmazások'],
             ['name' => 'Előfizetés', 'description' => 'Előfizetéses szolgáltatások'],
-            ['name' => 'Oktatás', 'description' => 'Oktatási anyagok'],
         ];
 
         foreach ($categories as $category) {

@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->enum('platform_type', ['pc', 'playstation', 'xbox', 'switch', 'other'])->nullable()->after('image');
+            $table->enum('platform_type', ['pc', 'ps4', 'ps5', 'xbox', 'nintendo'])->nullable()->after('image');
         });
     }
 

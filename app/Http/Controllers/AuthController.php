@@ -122,14 +122,6 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        // Mentsd el a kosárat az aktuális felhasználóhoz
-        $user = Auth::user();
-        if ($user && session()->has('cart')) {
-            $user->update([
-                'cart_data' => session()->get('cart')
-            ]);
-        }
-
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();

@@ -360,7 +360,6 @@
                                 <th>Eladó</th>
                                 <th>Platform</th>
                                 <th>Ár</th>
-                                <th>Készlet</th>
                                 <th>Értékelés</th>
                                 <th style="text-align: center;">Akció</th>
                             </tr>
@@ -377,20 +376,9 @@
                                             <span style="color: #00ff99;">INGYENES</span>
                                         @endif
                                     </td>
-                                    <td>
-                                        @if($offer->stock > 0)
-                                            <span style="color: #00ff99;">{{ $offer->stock }} db</span>
-                                        @else
-                                            <span style="color: #ff6b6b;">Nincs készleten</span>
-                                        @endif
-                                    </td>
                                     <td><span class="rating-stars">{{ str_repeat('⭐', (int)$offer->vendor->rating) }}</span> {{ number_format($offer->vendor->rating, 1) }}/5</td>
                                     <td style="text-align: center;">
-                                        @if($offer->stock > 0)
-                                            <button type="button" class="btn-kosarba" data-product-id="{{ $product->id }}" data-offer-id="{{ $offer->id }}" data-price="{{ $offer->price }}" data-vendor="{{ $offer->vendor->name }}" onclick="addToCart(event)">Kosárba</button>
-                                        @else
-                                            <button type="button" class="btn-kosarba" style="background: #666; cursor: not-allowed;" disabled>Nincs elérhető</button>
-                                        @endif
+                                        <button type="button" class="btn-kosarba" data-product-id="{{ $product->id }}" data-offer-id="{{ $offer->id }}" data-price="{{ $offer->price }}" data-vendor="{{ $offer->vendor->name }}" onclick="addToCart(event)">Kosárba</button>
                                     </td>
                                 </tr>
                             @endforeach

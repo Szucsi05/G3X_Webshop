@@ -194,7 +194,7 @@
             </div>
             <div class="info-row">
                 <span class="info-label">🎮 Termékek:</span>
-                <span class="info-value">{{ is_array($order->items) ? count($order->items) : 0 }} db</span>
+                <span class="info-value">{{ $order->items()->count() }} db</span>
             </div>
             @php
                 $paymentMethods = [
@@ -211,26 +211,42 @@
         </div>
 
         <div class="licenses-section">
-            <h2>🔑 Az aktiválási kulcsok</h2>
+            <h2>� Rendelt Termékek</h2>
             
-            @if($order->licenses && count($order->licenses) > 0)
-                @foreach($order->licenses as $index => $license)
+            @if($order->items && $order->items->count() > 0)
+                @foreach($order->items as $item)
                     <div class="license-card">
-                        <div class="license-product">🎮 {{ $license['name'] }}</div>
-                        <div class="license-seller">Eladó: {{ $license['seller'] }}</div>
-                        <div class="license-key">
-                            <span id="key-{{ $index }}">{{ $license['key'] }}</span>
-                            <button type="button" class="copy-btn" onclick="copyToClipboard('key-{{ $index }}')">📋 Másolás</button>
+                        <div class="license-product">🎮 {{ $item->productOffer->product->name }}</div>
+                        <div class="license-seller">Eladó: {{ $item->productOffer->vendor->name }}</div>
+                        <div class="info-row" style="margin-top: 10px; color: #cccccc;">
+                            <span>Ár: <strong>{{ number_format($item->price_at_purchase, 0, ',', ' ') }} Ft</strong></span>
                         </div>
                     </div>
                 @endforeach
             @else
-                <p style="color: #cccccc;">Nincsenek elérhető aktiválási kulcsok.</p>
+                <p style="color: #cccccc;">Nincsenek termékek ebben a rendelésben.</p>
             @endif
         </div>
 
-        <div class="email-note">
-            ℹ️ Az összes aktiválási kulcs és a számla is el lett küldve az {{ $order->email }} címre.
+        <div class="licenses-section">
+            <h2>🔑 Az aktiválási kulcsok</h2>
+            
+            @if($order->items && $order->items->count() > 0)
+                @foreach($order->items as $item)
+                    @if($item->license_key)
+                        <div class="license-card">
+                            <div class="license-product">🎮 {{ $item->productOffer->product->name }}</div>
+                            <div class="license-seller">Eladó: {{ $item->productOffer->vendor->name }}</div>
+                            <div class="license-key">
+                                <span id="key-{{ $item->id }}">{{ $item->license_key }}</span>
+                                <button type="button" class="copy-btn" onclick="copyToClipboard('key-{{ $item->id }}')">📋 Másolás</button>
+                            </div>
+                        </div>
+                    @endif
+                @endforeach
+            @else
+                <p style="color: #cccccc;">Nincsenek elérhető aktiválási kulcsok.</p>
+            @endif
         </div>
 
         <div class="action-buttons">

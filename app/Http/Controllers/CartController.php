@@ -44,6 +44,11 @@ class CartController extends Controller
         }
 
         session()->put('cart', $cart);
+        
+        // Sync cart to database if user is authenticated
+        if (Auth::check()) {
+            Auth::user()->update(['cart_data' => $cart]);
+        }
 
         if ($request->expectsJson()) {
             return response()->json(['success' => true, 'message' => 'Termék hozzáadva a kosárhoz.', 'cart_count' => array_sum(array_column($cart, 'quantity'))]);
@@ -58,6 +63,12 @@ class CartController extends Controller
             unset($cart[$id]);
             session()->put('cart', $cart);
         }
+        
+        // Sync cart to database if user is authenticated
+        if (Auth::check()) {
+            Auth::user()->update(['cart_data' => $cart]);
+        }
+        
         if ($request->expectsJson()) {
             $total = array_sum(array_map(function($item) {
                 return $item['price'] * $item['quantity'];
@@ -74,6 +85,12 @@ class CartController extends Controller
             $cart[$id]['quantity'] = $request->quantity;
             session()->put('cart', $cart);
         }
+        
+        // Sync cart to database if user is authenticated
+        if (Auth::check()) {
+            Auth::user()->update(['cart_data' => $cart]);
+        }
+        
         if ($request->expectsJson()) {
             $total = array_sum(array_map(function($item) {
                 return $item['price'] * $item['quantity'];
@@ -214,18 +231,6 @@ class CartController extends Controller
             return redirect('/')->with('error', 'A kosár üres.');
         }
 
-        // Generate random keys for each product
-        $licenses = [];
-        foreach ($cart as $id => $item) {
-            for ($i = 0; $i < $item['quantity']; $i++) {
-                $licenses[] = [
-                    'name' => $item['name'],
-                    'seller' => $item['seller'] ?? 'N/A',
-                    'key' => strtoupper(substr(md5(rand() . time() . $id . $i), 0, 16))
-                ];
-            }
-        }
-
         // Calculate total
         $total = array_sum(array_map(function($item) {
             return $item['price'] * $item['quantity'];
@@ -233,18 +238,59 @@ class CartController extends Controller
 
         // Save order to database if user is authenticated
         if (Auth::check()) {
-            Order::create([
+            $order = Order::create([
                 'user_id' => Auth::id(),
                 'email' => $request->email,
                 'total_amount' => $total,
                 'payment_method' => $request->input('payment_method'),
-                'items' => $cart,
-                'licenses' => $licenses
+                'status' => 'pending',
+                'currency' => 'HUF',
             ]);
+
+            // Save order items with license keys
+            $licenses = [];
+            foreach ($cart as $cartKey => $item) {
+                // Generate license keys for each quantity
+                for ($i = 0; $i < $item['quantity']; $i++) {
+                    $licenseKey = strtoupper(substr(md5(rand() . time() . $cartKey . $i), 0, 16));
+                    $licenses[] = [
+                        'name' => $item['name'],
+                        'seller' => $item['seller'] ?? 'N/A',
+                        'key' => $licenseKey
+                    ];
+
+                    // Create order item record
+                    \App\Models\OrderItem::create([
+                        'order_id' => $order->id,
+                        'product_offer_id' => $item['offer_id'],
+                        'price_at_purchase' => $item['price'],
+                        'quantity' => 1,
+                        'license_key' => $licenseKey,
+                    ]);
+                }
+            }
+        } else {
+            // Guest checkout - only generate licenses
+            $licenses = [];
+            foreach ($cart as $cartKey => $item) {
+                for ($i = 0; $i < $item['quantity']; $i++) {
+                    $licenses[] = [
+                        'name' => $item['name'],
+                        'seller' => $item['seller'] ?? 'N/A',
+                        'key' => strtoupper(substr(md5(rand() . time() . $cartKey . $i), 0, 16))
+                    ];
+                }
+            }
         }
 
-        // Clear cart
+        // Clear cart from session and database
         session()->forget('cart');
+        
+        if (Auth::check()) {
+            // Clear cart data from database too, so when user logs out and logs back in,
+            // they don't get the old cart items merged
+            Auth::user()->update(['cart_data' => null]);
+        }
 
         return view('checkout-success', [
             'email' => $request->email,

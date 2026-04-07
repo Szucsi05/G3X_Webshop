@@ -20,8 +20,7 @@ class ProductController extends Controller
         if ($query) {
             $products = Product::where('name', 'like', "%{$query}%")
                 ->orWhere('description', 'like', "%{$query}%")
-                ->orWhere('platform', 'like', "%{$query}%")
-                ->orWhere('genre', 'like', "%{$query}%")
+                ->with('category')
                 ->get();
         } else {
             $products = Product::all();

@@ -19,16 +19,20 @@ class FilterController extends Controller
         if ($category) {
             switch ($category) {
                 case 'pc_games':
-                    $products = Product::where('platform_type', 'pc')->get();
+                    $products = Product::where('platform_type', 'pc')
+                        ->whereHas('category', fn($q) => $q->where('name', 'Játék'))
+                        ->get();
                     break;
                 case 'console_games':
-                    $products = Product::whereIn('platform_type', ['playstation', 'xbox', 'switch'])->get();
+                    $products = Product::whereIn('platform_type', ['ps4', 'ps5', 'xbox', 'nintendo'])
+                        ->whereHas('category', fn($q) => $q->where('name', 'Játék'))
+                        ->get();
                     break;
                 case 'game_subscriptions':
                     $products = Product::whereHas('category', fn($q) => $q->where('name', 'Előfizetés'))->get();
                     break;
                 case 'software':
-                    $products = Product::where('platform_type', 'szoftver')->get();
+                    $products = Product::whereHas('category', fn($q) => $q->where('name', 'Szoftver'))->get();
                     break;
                 default:
                     $products = Product::all();

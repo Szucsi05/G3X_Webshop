@@ -375,7 +375,7 @@
         const totalElement = document.getElementById('total-price');
         const subtotalElement = document.getElementById('subtotal-price');
         if (totalElement) {
-            const formattedTotal = new Intl.NumberFormat('hu-HU').format(total);
+            const formattedTotal = number_format(total) + ' Ft';
             totalElement.textContent = formattedTotal;
             if (subtotalElement) {
                 subtotalElement.textContent = formattedTotal;
