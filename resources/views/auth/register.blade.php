@@ -63,7 +63,7 @@
                     <div class="form-group"><label for="email">E-mail</label><input type="email" id="email" name="email" value="{{ old('email') }}" placeholder="you@email.com" required></div>
                     <div class="form-group"><label for="password">Jelszó</label><input type="password" id="password" name="password" placeholder="••••••••" required></div>
                     <div class="form-group"><label for="password_confirmation">Jelszó megerősítése</label><input type="password" id="password_confirmation" name="password_confirmation" placeholder="••••••••" required></div>
-                    <button type="submit" class="btn-register">✍️ Regisztráció</button>
+                    <button type="submit" class="btn-register">Regisztráció</button>
                 </form>
                 <div class="login-link" style="text-align:center;margin-top:12px;color:#cccccc">Már van fiókod? <a href="{{ route('login') }}" style="color:#00ff99">Jelentkezz be</a></div>
             </div>

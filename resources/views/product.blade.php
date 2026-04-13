@@ -376,7 +376,7 @@
                                             <span style="color: #00ff99;">INGYENES</span>
                                         @endif
                                     </td>
-                                    <td><span class="rating-stars">{{ str_repeat('⭐', (int)$offer->vendor->rating) }}</span> {{ number_format($offer->vendor->rating, 1) }}/5</td>
+                                    <td><span class="rating-stars">{{ number_format($offer->vendor->rating, 1) }}/5 ⭐</span></td>
                                     <td style="text-align: center;">
                                         <button type="button" class="btn-kosarba" data-product-id="{{ $product->id }}" data-offer-id="{{ $offer->id }}" data-price="{{ $offer->price }}" data-vendor="{{ $offer->vendor->name }}" onclick="addToCart(event)">Kosárba</button>
                                     </td>
@@ -400,7 +400,7 @@
             <div class="review-item">
                 <div class="review-header">
                     <span class="review-author">👤 Csaba K.</span>
-                    <span class="review-rating">⭐⭐⭐⭐⭐ 5/5</span>
+                    <span class="review-rating">5/5 ⭐</span>
                 </div>
                 <p class="review-text">Kiváló termék! Gyors szállítás és még jobb minőség. Csak ajánlani tudom mindenkinek!</p>
                 <div class="review-date">2025. január 12.</div>
@@ -409,7 +409,7 @@
             <div class="review-item">
                 <div class="review-header">
                     <span class="review-author">👤 Petra M.</span>
-                    <span class="review-rating">⭐⭐⭐⭐ 4/5</span>
+                    <span class="review-rating">4/5 ⭐</span>
                 </div>
                 <p class="review-text">Nagyon jó ár-érték arány. Az egyetlen hiba, hogy a szállítás egy kicsit lassabb volt.</p>
                 <div class="review-date">2025. január 11.</div>
@@ -418,7 +418,7 @@
             <div class="review-item">
                 <div class="review-header">
                     <span class="review-author">👤 János T.</span>
-                    <span class="review-rating">⭐⭐⭐⭐⭐ 5/5</span>
+                    <span class="review-rating">5/5 ⭐</span>
                 </div>
                 <p class="review-text">Megérte minden fillér! Fantasztikus élmény volt, és a támogatás csapata szuperül segített.</p>
                 <div class="review-date">2025. január 10.</div>
@@ -427,7 +427,7 @@
             <div class="review-item">
                 <div class="review-header">
                     <span class="review-author">👤 Anna B.</span>
-                    <span class="review-rating">⭐⭐⭐⭐ 4/5</span>
+                    <span class="review-rating">4/5 ⭐</span>
                 </div>
                 <p class="review-text">Jó termék, hasznos információk. Legközelebb újra vásárolni fogok.</p>
                 <div class="review-date">2025. január 9.</div>

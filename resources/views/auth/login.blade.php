@@ -54,8 +54,7 @@
     <div class="auth-content">
         <div class="login-container">
             <div class="login-left">
-                <h1>Üdv!<br>Jó látni téged!</h1>
-                <p>Csatlakozz a G3X közösséghez és fedezd fel a legjobb ajánlatokat digitális termékeinkre.</p>
+                <h1>Üdv! <br> Jó újra látni.</h1>
             </div>
 
             <div class="login-right">
@@ -73,7 +72,7 @@
                 <form method="POST" action="{{ route('login') }}">@csrf
                     <div class="form-group"><label for="email">E-mail</label><input type="email" id="email" name="email" value="{{ old('email') }}" placeholder="your@email.com" required></div>
                     <div class="form-group"><label for="password">Jelszó</label><input type="password" id="password" name="password" placeholder="••••••••" required></div>
-                    <button type="submit" class="btn-login">🔓 Bejelentkezés</button>
+                    <button type="submit" class="btn-login">Bejelentkezés</button>
                 </form>
 
                 <div class="register-link" style="text-align:center;margin-top:12px;color:#cccccc">Nincs fiókod? <a href="{{ route('register') }}" style="color:#00ff99">Regisztrálj most</a></div>

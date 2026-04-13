@@ -68,12 +68,7 @@
             font-size: 80px;
             margin-bottom: 20px;
             display: block;
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
+            animation: none;
         }
 
         .btn-continue-shopping {
@@ -151,13 +146,13 @@
     </div>
 
     <div class="cart-container">
-        <h1 style="color: #00ff99; margin-bottom: 30px;">🛒 Kosár</h1>
+        <h1 style="color: #00ff99; margin-bottom: 30px;">Kosár</h1>
         @if(empty($cart))
             <div class="empty-cart-container">
                 <div class="empty-cart-content">
                     <div class="empty-icon">📦</div>
-                    <h2 style="color: #fff; margin-bottom: 10px;">A kosár üres</h2>
-                    <p style="color: #7d6b9f; margin-bottom: 30px; font-size: 1.1em;">Töltsd fel játékokkal vagy ajándékkártyákkal!</p>
+                    <h2 style="color: #fff; margin-bottom: 10px;">Kosarad üres</h2>
+                    <p style="color: #7d6b9f; margin-bottom: 30px; font-size: 1.1em;">Úgy tűnik, még nem választottál terméket</p>
                     <a href="{{ route('home') }}" class="btn-continue-shopping">← Vissza a főoldalra</a>
                 </div>
             </div>
@@ -166,7 +161,7 @@
                 <!-- Kosár tartalma -->
                 <div>
                     <div style="background: linear-gradient(135deg, #2c1e4a, #3b2d5c); padding: 25px; border-radius: 10px; border: 1px solid #5c4d7c;">
-                        <h3 style="color: #00cc88; margin-bottom: 20px; font-size: 1.3em;">📋 Kosár tartalma</h3>
+                        <h3 style="color: #00cc88; margin-bottom: 20px; font-size: 1.3em;">Kosár tartalma</h3>
                         @php $total = 0; @endphp
                         @foreach($cart as $id => $item)
                             @php $subtotal = $item['price'] * $item['quantity']; $total += $subtotal; @endphp
@@ -201,7 +196,7 @@
                 <!-- Összegzés és fizetés -->
                 <div>
                     <div style="background: linear-gradient(135deg, #00cc88, #009966); padding: 25px; border-radius: 10px; box-shadow: 0 8px 32px rgba(0, 200, 136, 0.2);">
-                        <h3 style="color: #000; margin-bottom: 20px; font-size: 1.3em;">💳 Végösszesen</h3>
+                        <h3 style="color: #000; margin-bottom: 20px; font-size: 1.3em;">Végösszeg</h3>
                         
                         <div style="background: rgba(0, 0, 0, 0.1); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
                             <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">

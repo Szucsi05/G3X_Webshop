@@ -289,14 +289,14 @@ body {
 
 /* CARDS */
 .cards-section {
-    padding: 50px 30px;
+    padding: 20px 30px;
     background: #0b1c2c;
-    margin-bottom: 30px;
+    margin-bottom: 8px;
 }
 
 .cards-section h2 {
     color: #00cc88;
-    margin-bottom: 40px;
+    margin: 0 0 20px;
     text-align: center;
     text-shadow: 0 0 10px rgba(0, 204, 136, 0.3);
 }

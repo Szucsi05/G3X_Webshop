@@ -65,7 +65,7 @@
             <p style="font-size: 1.4em; color: #cccccc; margin-bottom: 30px; line-height: 1.6;">Hasonlítsd össze az árakat, keress a legjobbat, és vásárolj garantáltan biztonságosan. 100+ ajánlat.</p>
             <div style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;">
                 <a href="{{ route('filter.show') }}" style="display: inline-block; padding: 12px 30px; font-size: 1.1em; background: linear-gradient(135deg, #00ff99, #00cc88); color: #000; text-decoration: none; border-radius: 8px; border: none; cursor: pointer; font-weight: bold; transition: all 0.3s ease; box-shadow: 0 4px 20px rgba(0, 255, 153, 0.3);">🔍 Vásárlás Megkezdése</a>
-                <a href="#featured" style="display: inline-block; padding: 12px 30px; font-size: 1.1em; background: transparent; color: #00ff99; text-decoration: none; border-radius: 8px; border: 2px solid #00ff99; cursor: pointer; font-weight: bold; transition: all 0.3s ease;">⬇️ Felfedezés</a>
+                <a href="#popular" style="display: inline-block; padding: 12px 30px; font-size: 1.1em; background: transparent; color: #00ff99; text-decoration: none; border-radius: 8px; border: 2px solid #00ff99; cursor: pointer; font-weight: bold; transition: all 0.3s ease;">⬇️ Felfedezés</a>
             </div>
         </div>
     </header>
@@ -73,11 +73,11 @@
 
 
 
-    <!-- KÁRTYÁK -->
-    <section class="cards-section" id="featured">
-        <h2 style="font-size: 2.5em; margin-bottom: 20px; text-align: center;">🎮 Kiemelt Termékek</h2>
+    <!-- POPULAR GAMES -->
+    <section class="cards-section" id="popular">
+        <h2 style="font-size: 2.5em; margin-bottom: 20px; text-align: center;">🔥 Legnépszerűbb Játékok</h2>
         <div class="products-grid">
-            @foreach($featured as $product)
+            @foreach($popular as $product)
                 @php
                     $imagePath = $product->image && file_exists(public_path($product->image)) ? $product->image : 'images/default-product.svg';
                     $offers = $product->offers()->orderBy('price')->get();
@@ -104,25 +104,79 @@
                 </div>
             @endforeach
         </div>
+    </section>
 
-        <div style="text-align: center; margin-top: 50px;">
-            <a href="{{ route('filter.show') }}" class="view-all-btn" style="display: inline-block; padding: 15px 40px; font-size: 1.1em; background: linear-gradient(135deg, #00cc88, #00aa66); color: white; text-decoration: none; border-radius: 8px; border: none; cursor: pointer; font-weight: bold; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0, 204, 136, 0.3);">
-                ➤ Összes Terméket Megtekintése ({{ \App\Models\Product::count() }})
-            </a>
+    <!-- BEST SELLING -->
+    <section class="cards-section">
+        <h2 style="font-size: 2.5em; margin-bottom: 20px; text-align: center;">🚀 Best Selling</h2>
+        <div class="products-grid">
+            @foreach($bestSelling as $product)
+                @php
+                    $imagePath = $product->image && file_exists(public_path($product->image)) ? $product->image : 'images/default-product.svg';
+                    $offers = $product->offers()->orderBy('price')->get();
+                    $minPrice = $offers->first()?->price;
+                @endphp
+                <div class="product-card" onclick="goToProduct({{ $product->id }})" style="cursor: pointer;">
+                    <img src="{{ asset($imagePath) }}" alt="{{ $product->name }}" class="product-image" style="background: #1a1a3e;">
+                    <div class="product-info">
+                        <h3>{{ $product->name }}</h3>
+                        <p class="product-description">{{ $product->offers->count() }} ajánlat - {{ $product->category?->name ?? 'Ismeretlen' }}</p>
+                        <div class="product-footer">
+                            <span class="product-price">
+                                @if($offers->isEmpty())
+                                    Nincs elérhető ajánlat
+                                @elseif($minPrice > 0)
+                                    {{ number_format($minPrice, 0, ',', '.') . ' Ft' }}
+                                @else
+                                    INGYENES
+                                @endif
+                            </span>
+                            <button type="button" class="btn-add-cart" onclick="event.stopPropagation(); goToProduct({{ $product->id }})">Részletek</button>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
         </div>
     </section>
 
-    <!-- CTA SZEKCIÓ -->
-    <section style="background: linear-gradient(135deg, #2c1e4a 0%, #1a1a3e 100%); padding: 80px 30px; text-align: center; margin-top: 20px;">
-        <div style="max-width: 800px; margin: 0 auto;">
-            <h2 style="font-size: 2.2em; color: #00ff99; margin-bottom: 20px;">Készen Állsz a Vásárlásra?</h2>
-            <p style="color: #cccccc; font-size: 1.1em; margin-bottom: 30px; line-height: 1.6;">Fedezd fel a legjobb ajánlatokat, hasonlítsd össze az árakat és vásárolj mit hiszel a legjobb.</p>
-            <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
-                <a href="{{ route('filter.show') }}" style="display: inline-block; padding: 15px 40px; font-size: 1.1em; background: linear-gradient(135deg, #00ff99, #00cc88); color: #000; text-decoration: none; border-radius: 8px; border: none; cursor: pointer; font-weight: bold; transition: all 0.3s ease; box-shadow: 0 4px 20px rgba(0, 255, 153, 0.3);">🛍️ Vásárolj Most</a>
-                <a href="{{ route('register') }}" style="display: inline-block; padding: 15px 40px; font-size: 1.1em; background: transparent; color: #00ff99; text-decoration: none; border-radius: 8px; border: 2px solid #00ff99; cursor: pointer; font-weight: bold; transition: all 0.3s ease;">👤 Regisztrálj Ingyenesen</a>
-            </div>
+    <!-- CONSOLE GAMES -->
+    <section class="cards-section" id="console-games">
+        <h2 style="font-size: 2.5em; margin-bottom: 20px; text-align: center;">🎮 Konzolos Játékok</h2>
+        <div class="products-grid">
+            @foreach($consoleGames as $product)
+                @php
+                    $imagePath = $product->image && file_exists(public_path($product->image)) ? $product->image : 'images/default-product.svg';
+                    $offers = $product->offers()->orderBy('price')->get();
+                    $minPrice = $offers->first()?->price;
+                @endphp
+                <div class="product-card" onclick="goToProduct({{ $product->id }})" style="cursor: pointer;">
+                    <img src="{{ asset($imagePath) }}" alt="{{ $product->name }}" class="product-image" style="background: #1a1a3e;">
+                    <div class="product-info">
+                        <h3>{{ $product->name }}</h3>
+                        <p class="product-description">{{ $product->offers->count() }} ajánlat - {{ $product->category?->name ?? 'Ismeretlen' }}</p>
+                        <div class="product-footer">
+                            <span class="product-price">
+                                @if($offers->isEmpty())
+                                    Nincs elérhető ajánlat
+                                @elseif($minPrice > 0)
+                                    {{ number_format($minPrice, 0, ',', '.') . ' Ft' }}
+                                @else
+                                    INGYENES
+                                @endif
+                            </span>
+                            <button type="button" class="btn-add-cart" onclick="event.stopPropagation(); goToProduct({{ $product->id }})">Részletek</button>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
         </div>
     </section>
+
+    <div style="text-align: center; margin-top: 50px;">
+        <a href="{{ route('filter.show') }}" class="view-all-btn" style="display: inline-block; padding: 15px 40px; font-size: 1.1em; background: linear-gradient(135deg, #00cc88, #00aa66); color: white; text-decoration: none; border-radius: 8px; border: none; cursor: pointer; font-weight: bold; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0, 204, 136, 0.3);">
+            ➤ Összes Terméket Megtekintése ({{ \App\Models\Product::count() }})
+        </a>
+    </div>
 
     <!-- FOOTER -->
     <footer class="footer">
