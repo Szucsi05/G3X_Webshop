@@ -70,6 +70,41 @@ class AuthController extends Controller
         return view('auth.login_new');
     }
 
+    // API login - returns X-API-TOKEN (static configured token)
+    public function apiLogin(Request $request)
+    {
+        $request->validate([
+            'username' => 'required|string',
+            'password' => 'required',
+        ]);
+
+        // Keressük az usert username vagy email alapján
+        $user = User::where('username', $request->username)
+                    ->orWhere('email', $request->username)
+                    ->first();
+
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
+        // Return configured API token (from config('app.api_token') or env('API_TOKEN'))
+        $apiToken = config('app.api_token') ?? env('API_TOKEN');
+
+        if (!$apiToken) {
+            return response()->json(['message' => 'API token not configured'], 500);
+        }
+
+        return response()->json([
+            'token' => $apiToken,
+            'api_token' => $apiToken,  // Alternative name for compatibility
+            'user' => [
+                'id' => $user->id,
+                'username' => $user->username,
+                'email' => $user->email,
+            ]
+        ], 200);
+    }
+
     public function login(Request $request)
     {
         $credentials = $request->validate([

@@ -58,7 +58,6 @@ class ProductOfferSeeder extends Seeder
                     ],
                     [
                         'price' => $price,
-                        'stock' => rand(10, 200),
                         'delivery_type' => 'key',
                         'region' => ['EU', 'US', 'GLOBAL'][rand(0, 2)],
                         'status' => 'active',

@@ -64,15 +64,9 @@ class ProductApiController extends Controller
             'genre' => ['nullable', 'string', 'max:255'],
             'category' => ['nullable', 'string', 'max:255'],
             'release_year' => ['nullable', 'integer'],
-            'prices' => ['required', 'array'],
-            'prices.*.price' => ['required', 'numeric'],
         ]);
 
-        // Ensure prices is JSON serializable
-        if (! is_array($data['prices'])) {
-            $data['prices'] = json_decode($data['prices'], true) ?? [];
-        }
-
+        // NOTE: Prices are now managed through ProductOffers, not directly on Products
         $product = Product::create($data);
 
         return response()->json($product, 201);
@@ -94,14 +88,9 @@ class ProductApiController extends Controller
             'genre' => ['nullable', 'string', 'max:255'],
             'category' => ['nullable', 'string', 'max:255'],
             'release_year' => ['nullable', 'integer'],
-            'prices' => ['sometimes', 'array'],
-            'prices.*.price' => ['required_with:prices', 'numeric'],
         ]);
 
-        if (isset($data['prices']) && ! is_array($data['prices'])) {
-            $data['prices'] = json_decode($data['prices'], true) ?? [];
-        }
-
+        // NOTE: Prices are managed through ProductOffers, not directly on Products
         $product->update($data);
 
         return response()->json($product);
