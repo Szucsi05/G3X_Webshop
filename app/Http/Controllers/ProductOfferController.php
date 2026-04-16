@@ -127,7 +127,7 @@ class ProductOfferController extends Controller
             return response()->json($offer->load(['product', 'vendor', 'platform']), 201);
         } catch (\Exception $e) {
             return response()->json([
-                'error' => 'Az ajánlat már létezik ehhez a termék-eladó-platform kombinációhoz',
+                'error' => 'An offer already exists for this product-vendor-platform combination.',
             ], 422);
         }
     }
@@ -160,6 +160,6 @@ class ProductOfferController extends Controller
         $offer = ProductOffer::findOrFail($id);
         $offer->delete();
 
-        return response()->json(['message' => 'Ajánlat sikeresen törölve'], 204);
+        return response()->json(['message' => 'Offer deleted successfully.'], 204);
     }
 }

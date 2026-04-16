@@ -1,0 +1,129 @@
+ .home-hero {
+    background: linear-gradient(135deg, #0a1428 0%, #1a1a3e 50%, #2c1e4a 100%);
+    position: relative;
+    overflow: hidden;
+    padding: 120px 30px;
+}
+
+.hero-orb-right,
+.hero-orb-left {
+    position: absolute;
+    border-radius: 50%;
+    z-index: 0;
+}
+
+.hero-orb-right {
+    top: -50%;
+    right: -10%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(0, 255, 153, 0.15) 0%, transparent 70%);
+}
+
+.hero-orb-left {
+    bottom: -30%;
+    left: -5%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(44, 30, 74, 0.3) 0%, transparent 70%);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.hero-title {
+    font-size: 3.5em;
+    font-weight: 800;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #00ff99 0%, #00ccff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.hero-copy {
+    font-size: 1.4em;
+    color: #cccccc;
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+.hero-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.hero-primary,
+.hero-secondary,
+.view-all-btn {
+    display: inline-block;
+    padding: 12px 30px;
+    font-size: 1.1em;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.hero-primary {
+    background: linear-gradient(135deg, #00ff99, #00cc88);
+    color: #000;
+    box-shadow: 0 4px 20px rgba(0, 255, 153, 0.3);
+}
+
+.hero-secondary {
+    background: transparent;
+    color: #00ff99;
+    border: 2px solid #00ff99;
+}
+
+.home-section-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    width: 100%;
+    line-height: 1;
+}
+
+.home-product-card {
+    cursor: pointer;
+}
+
+.home-product-image {
+    background: #1a1a3e;
+}
+
+.view-all-wrap {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.view-all-btn {
+    padding: 15px 40px;
+    background: linear-gradient(135deg, #00cc88, #00aa66);
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(0, 204, 136, 0.3);
+}
+
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2.4em;
+    }
+
+    .hero-copy {
+        font-size: 1.05em;
+    }
+
+    .home-section-title {
+        font-size: 1.8em;
+    }
+}

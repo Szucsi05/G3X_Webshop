@@ -76,6 +76,6 @@ class CategoryController extends Controller
         $category = Category::findOrFail($id);
         $category->delete();
 
-        return response()->json(['message' => 'Kategória sikeresen törölve'], 204);
+        return response()->json(['message' => 'Category deleted successfully.'], 204);
     }
 }

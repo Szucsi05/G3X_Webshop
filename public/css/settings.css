@@ -1,0 +1,170 @@
+.settings-page {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0b1c2c 0%, #1a3a52 100%);
+}
+
+.settings-shell {
+    min-height: 100vh;
+    padding: 120px 20px 40px;
+}
+
+.settings-container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.settings-header {
+    margin-bottom: 30px;
+}
+
+.settings-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #00ff99;
+    text-decoration: none;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.settings-back-link:hover {
+    color: #7efec5;
+}
+
+.settings-back-link--bottom {
+    margin-top: 16px;
+    margin-bottom: 0;
+}
+
+.settings-title {
+    margin-top: 10px;
+    font-size: 32px;
+    color: #fff;
+}
+
+.settings-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.settings-tab {
+    padding: 10px 20px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 700;
+    border: 1px solid #00ff99;
+    background: rgba(0, 255, 153, 0.1);
+    color: #00ff99;
+}
+
+.settings-tab.active {
+    background: #00ff99;
+    color: #0b1c2c;
+    border-color: #00ff99;
+}
+
+.settings-flash {
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    font-weight: 700;
+}
+
+.settings-flash.success {
+    background: #00ff99;
+    color: #0b1c2c;
+}
+
+.settings-flash.error {
+    background: #ff4444;
+    color: #fff;
+}
+
+.settings-error {
+    margin: 5px 0;
+}
+
+.settings-form {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 30px;
+    border-radius: 12px;
+    border: 1px solid rgba(0, 255, 153, 0.2);
+}
+
+.settings-section {
+    margin-bottom: 30px;
+}
+
+.settings-section-title {
+    color: #00ff99;
+    font-size: 18px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #00ff99;
+    padding-bottom: 10px;
+}
+
+.settings-field {
+    margin-bottom: 20px;
+}
+
+.settings-label {
+    display: block;
+    color: #e0e0e0;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.settings-input {
+    width: 100%;
+    padding: 12px;
+    background: rgba(0, 255, 153, 0.05);
+    border: 1px solid #00ff99;
+    color: #fff;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+}
+
+.settings-input:focus {
+    outline: none;
+    border-color: #00ff99;
+    box-shadow: 0 0 10px rgba(0, 255, 153, 0.3);
+    background: rgba(0, 255, 153, 0.1);
+}
+
+.settings-submit {
+    width: 100%;
+    border-radius: 6px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.settings-submit {
+    padding: 14px;
+    background: linear-gradient(135deg, #00ff99 0%, #00dd88 100%);
+    color: #0b1c2c;
+    border: none;
+    font-size: 16px;
+    text-transform: uppercase;
+}
+
+.settings-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 255, 153, 0.3);
+}
+
+@media (max-width: 640px) {
+    .settings-shell {
+        padding: 110px 16px 32px;
+    }
+
+    .settings-form {
+        padding: 22px;
+    }
+
+    .settings-tabs {
+        flex-wrap: wrap;
+    }
+}

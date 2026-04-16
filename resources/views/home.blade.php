@@ -1,71 +1,39 @@
 <!DOCTYPE html>
-<html lang="hu">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>G3X - Digitális Piactér</title>
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <title>G3X - Digital Marketplace</title>
+    <link rel="stylesheet" href="{{ asset('css/base.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/layout.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/components.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/utilities.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/home.css') }}">
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}" sizes="any">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-    <!-- NAVBAR -->
-    <nav class="navbar">
-        <div class="navbar-top">
-            <a href="{{ route('home') }}" class="logo-link">
-                <div class="animated-logo">G3X</div>
-            </a>
-            <div class="search-bar">
-                <form method="GET" action="{{ route('search') }}" style="display: flex; width: 100%;">
-                    <input type="text" name="q" placeholder="Keresés játékokra, ajándékkártyákra..." value="{{ request('q') }}" style="padding: 12px 16px; font-size: 1.1em; flex: 1; border: 1px solid #5c4d7c; background: #3b2d5c; color: #fff; border-radius: 6px;">
-                </form>
-            </div>
-            <div class="nav-right">
-                <a href="#" class="nav-btn" style="display: flex; align-items: center; gap: 8px;" onclick="toggleSidebar()"><img src="{{ asset('icons/category.png') }}" alt="Kategóriák" style="width: 18px; height: 18px;"> Kategóriák</a>
-                @auth
-                    <div class="user-menu-container">
-                        <button class="user-btn">👤 {{ Auth::user()->name }}</button>
-                        <div class="user-dropdown" id="user-dropdown">
-                            <a href="{{ route('settings.show') }}" class="user-dropdown-item">⚙️ Beállítások</a>
-                            <a href="{{ route('orders.index') }}" class="user-dropdown-item">📋 Rendeléseim</a>
-                            <a href="{{ route('logout') }}" class="user-dropdown-item" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">🚪 Kijelentkezés</a>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                @csrf
-                            </form>
-                        </div>
-                    </div>
-                @else
-                    <a href="{{ route('register') }}" class="nav-btn" style="display: flex; align-items: center; gap: 8px;"><img src="{{ asset('icons/registration.png') }}" alt="Regisztráció" style="width: 18px; height: 18px;"> Regisztráció</a>
-                    <a href="{{ route('login') }}" class="nav-btn" style="display: flex; align-items: center; gap: 8px;"><img src="{{ asset('icons/login.png') }}" alt="Bejelentkezés" style="width: 18px; height: 18px;"> Bejelentkezés</a>
-                @endauth
-                <a href="{{ route('cart.index') }}" class="nav-btn" style="display: flex; align-items: center; gap: 8px;"><img src="{{ asset('icons/cart.png') }}" alt="Kosár" style="width: 18px; height: 18px;"> Cart <span id="cart-badge" style="background: red; color: white; border-radius: 50%; padding: 2px 6px; font-size: 12px; margin-left: 5px; display: {{ session('cart') ? 'inline' : 'none' }};">{{ session('cart') ? array_sum(array_column(session('cart'), 'quantity')) : '' }}</span></a>
-            </div>
-        </div>
-    </nav>
+    @include('partials.site-navbar')
+    @include('partials.site-sidebar')
 
-    <!-- OLDALSÁV -->
-    <div id="sidebar" class="sidebar">
-        <button class="close-btn" onclick="toggleSidebar()">✖</button>
-        <h3>Kategóriák</h3>
-        <ul>
-            <li><a href="{{ route('filter.show', 'pc-games') }}" onclick="clearFilters()" style="display: flex; align-items: center; gap: 8px;"><img src="{{ asset('icons/pc_category.png') }}" alt="PC játékok" style="width: 18px; height: 18px;"> PC játékok</a></li>
-            <li><a href="{{ route('filter.show', 'console-games') }}" onclick="clearFilters()" style="display: flex; align-items: center; gap: 8px;"><img src="{{ asset('icons/console_category.png') }}" alt="Konzol Játékok" style="width: 18px; height: 18px;"> Konzol Játékok</a></li>
-            <li><a href="{{ route('filter.show', 'game-subscriptions') }}" onclick="clearFilters()" style="display: flex; align-items: center; gap: 8px;"><img src="{{ asset('icons/subcriptions_category.png') }}" alt="Játék Előfizetések" style="width: 18px; height: 18px;"> Játék Előfizetések</a></li>
-            <li><a href="{{ route('filter.show', 'software') }}" onclick="clearFilters()" style="display: flex; align-items: center; gap: 8px;"><img src="{{ asset('icons/software_category.png') }}" alt="Szoftver" style="width: 18px; height: 18px;"> Szoftver</a></li>
-            <li><a href="{{ route('filter.show') }}" onclick="clearFilters()" style="display: flex; align-items: center; gap: 8px;"><img src="{{ asset('icons/all_category.png') }}" alt="Összes termék" style="width: 18px; height: 18px;"> Összes termék</a></li>
-        </ul>
-    </div>
+    @php
+        $categoryTranslations = [
+            'Játék' => 'Games',
+            'Szoftver' => 'Software',
+            'Előfizetés' => 'Subscriptions',
+        ];
+    @endphp
 
     <!-- HERO -->
-    <header class="hero" style="background: linear-gradient(135deg, #0a1428 0%, #1a1a3e 50%, #2c1e4a 100%); position: relative; overflow: hidden; padding: 120px 30px;">
-        <div style="position: absolute; top: -50%; right: -10%; width: 600px; height: 600px; background: radial-gradient(circle, rgba(0, 255, 153, 0.15) 0%, transparent 70%); border-radius: 50%; z-index: 0;"></div>
-        <div style="position: absolute; bottom: -30%; left: -5%; width: 500px; height: 500px; background: radial-gradient(circle, rgba(44, 30, 74, 0.3) 0%, transparent 70%); border-radius: 50%; z-index: 0;"></div>
-        <div style="position: relative; z-index: 1; max-width: 900px; margin: 0 auto;">
-            <h1 style="font-size: 3.5em; font-weight: 800; margin-bottom: 20px; background: linear-gradient(135deg, #00ff99 0%, #00ccff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">A Legjobb Digitális Piactér</h1>
-            <p style="font-size: 1.4em; color: #cccccc; margin-bottom: 30px; line-height: 1.6;">Hasonlítsd össze az árakat, keress a legjobbat, és vásárolj garantáltan biztonságosan. 100+ ajánlat.</p>
-            <div style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;">
-                <a href="{{ route('filter.show') }}" style="display: inline-block; padding: 12px 30px; font-size: 1.1em; background: linear-gradient(135deg, #00ff99, #00cc88); color: #000; text-decoration: none; border-radius: 8px; border: none; cursor: pointer; font-weight: bold; transition: all 0.3s ease; box-shadow: 0 4px 20px rgba(0, 255, 153, 0.3);">🔍 Vásárlás Megkezdése</a>
-                <a href="#popular" style="display: inline-block; padding: 12px 30px; font-size: 1.1em; background: transparent; color: #00ff99; text-decoration: none; border-radius: 8px; border: 2px solid #00ff99; cursor: pointer; font-weight: bold; transition: all 0.3s ease;">⬇️ Felfedezés</a>
+    <header class="hero home-hero">
+        <div class="hero-orb-right"></div>
+        <div class="hero-orb-left"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">The Best Digital Marketplace</h1>
+            <p class="hero-copy">Compare prices, find the best deal, and shop with confidence. 100+ offers available.</p>
+            <div class="hero-actions">
+                <a href="{{ route('filter.show') }}" class="hero-primary">Start Shopping</a>
+                <a href="#popular" class="hero-secondary">Explore</a>
             </div>
         </div>
     </header>
@@ -75,7 +43,7 @@
 
     <!-- POPULAR GAMES -->
     <section class="cards-section" id="popular">
-        <h2 style="display: flex; align-items: center; justify-content: center; gap: 12px; font-size: 2.5em; margin-bottom: 20px; width: 100%; line-height: 1;"><img src="{{ asset('icons/popular_games.png') }}" alt="Legnépszerűbb Játékok" style="width: 48px; height: 48px; vertical-align: middle; flex-shrink: 0;"> Legnépszerűbb Játékok</h2>
+        <h2 class="home-section-title">Most Popular Games <img src="{{ asset('icons/popular_games.png') }}" alt="Most Popular Games" class="icon-48 icon-no-shrink"></h2>
         <div class="products-grid">
             @foreach($popular as $product)
                 @php
@@ -83,22 +51,22 @@
                     $offers = $product->offers()->orderBy('price')->get();
                     $minPrice = $offers->first()?->price;
                 @endphp
-                <div class="product-card" onclick="goToProduct({{ $product->id }})" style="cursor: pointer;">
-                    <img src="{{ asset($imagePath) }}" alt="{{ $product->name }}" class="product-image" style="background: #1a1a3e;">
+                <div class="product-card home-product-card" onclick="goToProduct({{ $product->id }})">
+                    <img src="{{ asset($imagePath) }}" alt="{{ $product->name }}" class="product-image home-product-image">
                     <div class="product-info">
                         <h3>{{ $product->name }}</h3>
-                        <p class="product-description">{{ $product->offers->count() }} ajánlat - {{ $product->category?->name ?? 'Ismeretlen' }}</p>
+                        <p class="product-description">{{ $product->offers->count() }} offers - {{ $categoryTranslations[$product->category?->name] ?? ($product->category?->name ?? 'Unknown') }}</p>
                         <div class="product-footer">
                             <span class="product-price">
                                 @if($offers->isEmpty())
-                                    Nincs elérhető ajánlat
+                                    No offers available
                                 @elseif($minPrice > 0)
                                     {{ number_format($minPrice, 0, ',', '.') . ' Ft' }}
                                 @else
-                                    INGYENES
+                                    FREE
                                 @endif
                             </span>
-                            <button type="button" class="btn-add-cart" onclick="event.stopPropagation(); goToProduct({{ $product->id }})">Részletek</button>
+                            <button type="button" class="btn-add-cart" onclick="event.stopPropagation(); goToProduct({{ $product->id }})">Details</button>
                         </div>
                     </div>
                 </div>
@@ -108,7 +76,7 @@
 
     <!-- BEST SELLING -->
     <section class="cards-section">
-        <h2 style="display: flex; align-items: center; justify-content: center; gap: 12px; font-size: 2.5em; margin-bottom: 20px; width: 100%; line-height: 1;"><img src="{{ asset('icons/best_selling_games.png') }}" alt="Best Selling" style="width: 48px; height: 48px; vertical-align: middle; flex-shrink: 0;"> Best Selling</h2>
+        <h2 class="home-section-title"><img src="{{ asset('icons/best_selling_games.png') }}" alt="Best Selling" class="icon-48 icon-no-shrink"> Best Selling</h2>
         <div class="products-grid">
             @foreach($bestSelling as $product)
                 @php
@@ -116,22 +84,22 @@
                     $offers = $product->offers()->orderBy('price')->get();
                     $minPrice = $offers->first()?->price;
                 @endphp
-                <div class="product-card" onclick="goToProduct({{ $product->id }})" style="cursor: pointer;">
-                    <img src="{{ asset($imagePath) }}" alt="{{ $product->name }}" class="product-image" style="background: #1a1a3e;">
+                <div class="product-card home-product-card" onclick="goToProduct({{ $product->id }})">
+                    <img src="{{ asset($imagePath) }}" alt="{{ $product->name }}" class="product-image home-product-image">
                     <div class="product-info">
                         <h3>{{ $product->name }}</h3>
-                        <p class="product-description">{{ $product->offers->count() }} ajánlat - {{ $product->category?->name ?? 'Ismeretlen' }}</p>
+                        <p class="product-description">{{ $product->offers->count() }} offers - {{ $categoryTranslations[$product->category?->name] ?? ($product->category?->name ?? 'Unknown') }}</p>
                         <div class="product-footer">
                             <span class="product-price">
                                 @if($offers->isEmpty())
-                                    Nincs elérhető ajánlat
+                                    No offers available
                                 @elseif($minPrice > 0)
                                     {{ number_format($minPrice, 0, ',', '.') . ' Ft' }}
                                 @else
-                                    INGYENES
+                                    FREE
                                 @endif
                             </span>
-                            <button type="button" class="btn-add-cart" onclick="event.stopPropagation(); goToProduct({{ $product->id }})">Részletek</button>
+                            <button type="button" class="btn-add-cart" onclick="event.stopPropagation(); goToProduct({{ $product->id }})">Details</button>
                         </div>
                     </div>
                 </div>
@@ -141,7 +109,7 @@
 
     <!-- CONSOLE GAMES -->
     <section class="cards-section" id="console-games">
-        <h2 style="display: flex; align-items: center; justify-content: center; gap: 12px; font-size: 2.5em; margin-bottom: 20px; width: 100%; line-height: 1;"><img src="{{ asset('icons/console_games.png') }}" alt="Konzolos Játékok" style="width: 48px; height: 48px; vertical-align: middle; flex-shrink: 0;"> Konzolos Játékok</h2>
+        <h2 class="home-section-title">Console Games <img src="{{ asset('icons/console_games.png') }}" alt="Console Games" class="icon-48 icon-no-shrink"></h2>
         <div class="products-grid">
             @foreach($consoleGames as $product)
                 @php
@@ -149,22 +117,22 @@
                     $offers = $product->offers()->orderBy('price')->get();
                     $minPrice = $offers->first()?->price;
                 @endphp
-                <div class="product-card" onclick="goToProduct({{ $product->id }})" style="cursor: pointer;">
-                    <img src="{{ asset($imagePath) }}" alt="{{ $product->name }}" class="product-image" style="background: #1a1a3e;">
+                <div class="product-card home-product-card" onclick="goToProduct({{ $product->id }})">
+                    <img src="{{ asset($imagePath) }}" alt="{{ $product->name }}" class="product-image home-product-image">
                     <div class="product-info">
                         <h3>{{ $product->name }}</h3>
-                        <p class="product-description">{{ $product->offers->count() }} ajánlat - {{ $product->category?->name ?? 'Ismeretlen' }}</p>
+                        <p class="product-description">{{ $product->offers->count() }} offers - {{ $categoryTranslations[$product->category?->name] ?? ($product->category?->name ?? 'Unknown') }}</p>
                         <div class="product-footer">
                             <span class="product-price">
                                 @if($offers->isEmpty())
-                                    Nincs elérhető ajánlat
+                                    No offers available
                                 @elseif($minPrice > 0)
                                     {{ number_format($minPrice, 0, ',', '.') . ' Ft' }}
                                 @else
-                                    INGYENES
+                                    FREE
                                 @endif
                             </span>
-                            <button type="button" class="btn-add-cart" onclick="event.stopPropagation(); goToProduct({{ $product->id }})">Részletek</button>
+                            <button type="button" class="btn-add-cart" onclick="event.stopPropagation(); goToProduct({{ $product->id }})">Details</button>
                         </div>
                     </div>
                 </div>
@@ -172,75 +140,16 @@
         </div>
     </section>
 
-    <div style="text-align: center; margin-top: 50px;">
-        <a href="{{ route('filter.show') }}" class="view-all-btn" style="display: inline-block; padding: 15px 40px; font-size: 1.1em; background: linear-gradient(135deg, #00cc88, #00aa66); color: white; text-decoration: none; border-radius: 8px; border: none; cursor: pointer; font-weight: bold; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0, 204, 136, 0.3);">
-            ➤ Összes Terméket Megtekintése ({{ \App\Models\Product::count() }})
+    <div class="view-all-wrap">
+        <a href="{{ route('filter.show') }}" class="view-all-btn">
+            View All Products ({{ \App\Models\Product::count() }})
         </a>
     </div>
 
-    <!-- FOOTER -->
-    <footer class="footer">
-        <div class="footer-columns">
-            <div>
-                <h4>Kapcsolat</h4>
-                <p>Email: info@g3x.hu</p>
-                <p>Telefon: +36 30 123 4567</p>
-            </div>
-            <div>
-                <h4>GYIK</h4>
-                <p>Fizetés és szállítás</p>
-                <p>Visszatérítés</p>
-                <p>Fiók kezelése</p>
-            </div>
-            <div>
-                <h4>Rólunk</h4>
-                <p>Küldetésünk</p>
-                <p>Karrier</p>
-                <p>Blog</p>
-            </div>
-            <div>
-                <h4>Elérhetőségek</h4>
-                <p>Budapest, Magyarország</p>
-                <p>Nyitvatartás: H-P 9:00-17:00</p>
-            </div>
-        </div>
-        <p class="footer-bottom">© 2025 G3X - Minden jog fenntartva.</p>
-    </footer>
+    @include('partials.site-footer')
 
     <!-- JS -->
     <script>
-    let userDropdownTimeout;
-
-    function setupUserDropdownDelay() {
-        const userMenuContainer = document.querySelector('.user-menu-container');
-        if (!userMenuContainer) return;
-
-        userMenuContainer.addEventListener('mouseenter', function() {
-            clearTimeout(userDropdownTimeout);
-            const dropdown = this.querySelector('.user-dropdown');
-            if (dropdown) dropdown.classList.add('active');
-        });
-
-        userMenuContainer.addEventListener('mouseleave', function() {
-            const dropdown = this.querySelector('.user-dropdown');
-            userDropdownTimeout = setTimeout(() => {
-                if (dropdown) dropdown.classList.remove('active');
-            }, 300);
-        });
-    }
-
-    document.addEventListener('DOMContentLoaded', setupUserDropdownDelay);
-
-    function toggleSidebar() {
-        const sidebar = document.getElementById('sidebar');
-        sidebar.classList.toggle('active');
-    }
-
-    function clearFilters() {
-        localStorage.removeItem('filterState');
-        toggleSidebar();
-    }
-
     function goToProduct(productId) {
         localStorage.removeItem('lastSearchUrl');
         localStorage.removeItem('lastFilterUrl');
@@ -275,5 +184,6 @@
         .catch(error => console.error('Error:', error));
     }
     </script>
+    @include('partials.site-scripts')
 </body>
 </html>

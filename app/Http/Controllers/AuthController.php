@@ -58,11 +58,11 @@ class AuthController extends Controller
 
         // Ha checkout-ból érkezik és van kosár, szamlázási adatokra
         if (($request->query('from_checkout') || $request->input('from_checkout')) && !empty($mergedCart)) {
-            return redirect()->route('checkout.details')->with('success', 'Regisztráció és bejelentkezés sikeres!');
+            return redirect()->route('checkout.details')->with('success', 'Registration and sign-in completed successfully.');
         }
 
         // Egyébként a főoldalra
-        return redirect('/')->with('success', 'Regisztráció és bejelentkezés sikeres!');
+        return redirect('/')->with('success', 'Registration and sign-in completed successfully.');
     }
 
     public function showLoginForm(Request $request)
@@ -144,14 +144,14 @@ class AuthController extends Controller
             
             // Ha checkout-ból érkezik és van kosár, szamlázási adatokra
             if (($request->query('from_checkout') || $request->input('from_checkout')) && !empty($mergedCart)) {
-                return redirect()->route('checkout.details')->with('success', 'Sikeres bejelentkezés!');
+                return redirect()->route('checkout.details')->with('success', 'Signed in successfully.');
             }
 
-            return redirect('/')->with('success', 'Sikeres bejelentkezés!');
+            return redirect('/')->with('success', 'Signed in successfully.');
         }
 
         return back()->withErrors([
-            'email' => 'Hibás email vagy jelszó.',
+            'email' => 'Invalid email or password.',
         ]);
     }
 
@@ -160,6 +160,6 @@ class AuthController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/')->with('success', 'Sikeresen kijelentkeztél!');
+        return redirect('/')->with('success', 'You have been logged out successfully.');
     }
 }

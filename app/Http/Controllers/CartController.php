@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use App\Models\Order;
 use App\Models\ProductOffer;
 
@@ -20,9 +22,9 @@ class CartController extends Controller
         $offer = ProductOffer::with(['product', 'vendor'])->find($id);
         if (!$offer) {
             if ($request->expectsJson()) {
-                return response()->json(['success' => false, 'message' => 'Ajánlat nem található.']);
+                return response()->json(['success' => false, 'message' => 'Offer not found.']);
             }
-            return redirect()->back()->with('error', 'Ajánlat nem található.');
+            return redirect()->back()->with('error', 'Offer not found.');
         }
 
         $cart = session()->get('cart', []);
@@ -51,9 +53,9 @@ class CartController extends Controller
         }
 
         if ($request->expectsJson()) {
-            return response()->json(['success' => true, 'message' => 'Termék hozzáadva a kosárhoz.', 'cart_count' => array_sum(array_column($cart, 'quantity'))]);
+            return response()->json(['success' => true, 'message' => 'Product added to cart.', 'cart_count' => array_sum(array_column($cart, 'quantity'))]);
         }
-        return redirect()->back()->with('success', 'Termék hozzáadva a kosárhoz.');
+        return redirect()->back()->with('success', 'Product added to cart.');
     }
 
     public function remove(Request $request, $id)
@@ -73,9 +75,9 @@ class CartController extends Controller
             $total = array_sum(array_map(function($item) {
                 return $item['price'] * $item['quantity'];
             }, $cart));
-            return response()->json(['success' => true, 'message' => 'Termék eltávolítva a kosárból.', 'cart_count' => array_sum(array_column($cart, 'quantity')), 'total' => $total]);
+            return response()->json(['success' => true, 'message' => 'Product removed from cart.', 'cart_count' => array_sum(array_column($cart, 'quantity')), 'total' => $total]);
         }
-        return redirect()->back()->with('success', 'Termék eltávolítva a kosárból.');
+        return redirect()->back()->with('success', 'Product removed from cart.');
     }
 
     public function update(Request $request, $id)
@@ -95,9 +97,9 @@ class CartController extends Controller
             $total = array_sum(array_map(function($item) {
                 return $item['price'] * $item['quantity'];
             }, $cart));
-            return response()->json(['success' => true, 'message' => 'Mennyiség frissítve.', 'cart_count' => array_sum(array_column($cart, 'quantity')), 'total' => $total]);
+            return response()->json(['success' => true, 'message' => 'Quantity updated.', 'cart_count' => array_sum(array_column($cart, 'quantity')), 'total' => $total]);
         }
-        return redirect()->back()->with('success', 'Mennyiség frissítve.');
+        return redirect()->back()->with('success', 'Quantity updated.');
     }
 
     public function checkout(Request $request)
@@ -113,7 +115,7 @@ class CartController extends Controller
 
         $cart = session()->get('cart', []);
         if (empty($cart)) {
-            return redirect('/')->with('error', 'A kosár üres.');
+            return redirect('/')->with('error', 'Your cart is empty.');
         }
 
         // Calculate total
@@ -137,12 +139,12 @@ class CartController extends Controller
         // Ellenőrizd, hogy bejelentkezve van-e a felhasználó
         if (!Auth::check()) {
             // Irányítsd a login oldalra checkout paraméterrel
-            return redirect()->route('login', ['from_checkout' => true])->with('info', 'A fizetéshez jelentkezz be vagy regisztrálj.');
+            return redirect()->route('login', ['from_checkout' => true])->with('info', 'Please log in or register to continue to checkout.');
         }
 
         $cart = session()->get('cart', []);
         if (empty($cart)) {
-            return redirect('/')->with('error', 'A kosár üres.');
+            return redirect('/')->with('error', 'Your cart is empty.');
         }
 
         // Calculate total
@@ -195,10 +197,17 @@ class CartController extends Controller
 
     public function processCheckout(Request $request)
     {
+        $checkoutDetails = session()->get('checkout_details', []);
+
+        if (empty($checkoutDetails)) {
+            return redirect()->route('checkout.details')->with('error', 'Please provide your billing details first.');
+        }
+
+        $billingData = $this->mapBillingDetails($checkoutDetails);
+
         $cardSource = $request->input('card_source', 'new');
         
         $rules = [
-            'email' => 'required|email',
             'payment_method' => 'required|string|in:card,paypal,google_pay,apple_pay',
         ];
 
@@ -213,8 +222,6 @@ class CartController extends Controller
                 $rules['card_expiry'] = 'required|regex:/^\d{2}\/\d{2}$/';
                 $rules['card_cvc'] = 'required|regex:/^\d{3}$/';
                 $rules['card_name'] = 'required|string|max:255';
-                $rules['country'] = 'required|string';
-                $rules['postal_code'] = 'required|regex:/^\d{1,4}$/';
             }
         } elseif ($request->input('payment_method') === 'paypal') {
             $rules['paypal_email'] = 'required|email';
@@ -226,9 +233,13 @@ class CartController extends Controller
 
         $request->validate($rules);
 
+        if (empty($billingData['email'])) {
+            return redirect()->route('checkout.details')->with('error', 'The billing email address is missing.');
+        }
+
         $cart = session()->get('cart', []);
         if (empty($cart)) {
-            return redirect('/')->with('error', 'A kosár üres.');
+            return redirect('/')->with('error', 'Your cart is empty.');
         }
 
         // Calculate total
@@ -236,32 +247,39 @@ class CartController extends Controller
             return $item['price'] * $item['quantity'];
         }, $cart));
 
-        // Save order to database if user is authenticated
-        if (Auth::check()) {
+        $licenses = [];
+
+        DB::transaction(function () use ($request, $billingData, $cart, $total, &$licenses) {
             $order = Order::create([
                 'user_id' => Auth::id(),
-                'email' => $request->email,
+                'email' => $billingData['email'],
                 'total_amount' => $total,
                 'payment_method' => $request->input('payment_method'),
-                'status' => 'pending',
+                'status' => 'completed',
                 'currency' => 'HUF',
+                'billing_name' => $billingData['name'],
+                'billing_email' => $billingData['email'],
+                'billing_phone' => $billingData['phone'],
+                'billing_country' => $billingData['country'],
+                'billing_city' => $billingData['city'],
+                'billing_postal' => $billingData['postal'],
+                'billing_street' => $billingData['street'],
+                'billing_company_name' => $billingData['company_name'],
+                'billing_tax_id' => $billingData['tax_id'],
+                'account_type' => $billingData['account_type'],
             ]);
 
-            // Save order items with license keys
-            $licenses = [];
             foreach ($cart as $cartKey => $item) {
-                // Generate license keys for each quantity
-                for ($i = 0; $i < $item['quantity']; $i++) {
-                    $licenseKey = strtoupper(substr(md5(rand() . time() . $cartKey . $i), 0, 16));
+                for ($index = 0; $index < $item['quantity']; $index++) {
+                    $licenseKey = $this->generateLicenseKey($cartKey, $index);
+
                     $licenses[] = [
                         'name' => $item['name'],
                         'seller' => $item['seller'] ?? 'N/A',
-                        'key' => $licenseKey
+                        'key' => $licenseKey,
                     ];
 
-                    // Create order item record
-                    \App\Models\OrderItem::create([
-                        'order_id' => $order->id,
+                    $order->items()->create([
                         'product_offer_id' => $item['offer_id'],
                         'price_at_purchase' => $item['price'],
                         'quantity' => 1,
@@ -269,22 +287,11 @@ class CartController extends Controller
                     ]);
                 }
             }
-        } else {
-            // Guest checkout - only generate licenses
-            $licenses = [];
-            foreach ($cart as $cartKey => $item) {
-                for ($i = 0; $i < $item['quantity']; $i++) {
-                    $licenses[] = [
-                        'name' => $item['name'],
-                        'seller' => $item['seller'] ?? 'N/A',
-                        'key' => strtoupper(substr(md5(rand() . time() . $cartKey . $i), 0, 16))
-                    ];
-                }
-            }
-        }
+        });
 
         // Clear cart from session and database
         session()->forget('cart');
+        session()->forget('checkout_details');
         
         if (Auth::check()) {
             // Clear cart data from database too, so when user logs out and logs back in,
@@ -293,11 +300,54 @@ class CartController extends Controller
         }
 
         return view('checkout-success', [
-            'email' => $request->email,
+            'email' => $billingData['email'],
             'licenses' => $licenses,
             'total' => $total,
             'payment_method' => $request->payment_method
         ]);
+    }
+
+    private function mapBillingDetails(array $checkoutDetails): array
+    {
+        $accountType = $checkoutDetails['account_type'] ?? 'personal';
+
+        if ($accountType === 'company') {
+            return [
+                'account_type' => 'company',
+                'name' => $checkoutDetails['billing_company_name'] ?? null,
+                'email' => $checkoutDetails['billing_email_company'] ?? null,
+                'phone' => $checkoutDetails['billing_phone_company'] ?? null,
+                'country' => $checkoutDetails['billing_country_company'] ?? null,
+                'city' => $checkoutDetails['billing_city_company'] ?? null,
+                'postal' => $checkoutDetails['billing_postal_company'] ?? null,
+                'street' => $checkoutDetails['billing_street_company'] ?? null,
+                'company_name' => $checkoutDetails['billing_company_name'] ?? null,
+                'tax_id' => $checkoutDetails['billing_tax_id'] ?? null,
+            ];
+        }
+
+        return [
+            'account_type' => 'personal',
+            'name' => $checkoutDetails['billing_name_personal'] ?? null,
+            'email' => $checkoutDetails['billing_email_personal'] ?? null,
+            'phone' => $checkoutDetails['billing_phone_personal'] ?? null,
+            'country' => $checkoutDetails['billing_country_personal'] ?? null,
+            'city' => $checkoutDetails['billing_city_personal'] ?? null,
+            'postal' => $checkoutDetails['billing_postal_personal'] ?? null,
+            'street' => $checkoutDetails['billing_street_personal'] ?? null,
+            'company_name' => null,
+            'tax_id' => null,
+        ];
+    }
+
+    private function generateLicenseKey(string $cartKey, int $index): string
+    {
+        return strtoupper(implode('-', [
+            Str::upper(Str::random(4)),
+            Str::upper(Str::random(4)),
+            Str::upper(Str::random(4)),
+            substr(hash('sha256', $cartKey . microtime(true) . $index), 0, 4),
+        ]));
     }
 
     private function getProducts()

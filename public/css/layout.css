@@ -1,0 +1,259 @@
+/* NAVBAR */
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: #2c1e4a;
+    padding: 15px 30px;
+    z-index: 1000;
+}
+
+.navbar-top {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+}
+
+.nav-right {
+    display: flex;
+    gap: 15px;
+}
+
+.logo {
+    font-size: 28px;
+    color: #00ff99;
+    font-weight: bold;
+}
+
+.logo-link {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+
+.animated-logo {
+    font-size: 2.5em;
+    font-weight: bold;
+    background: linear-gradient(45deg, #00ff99, #ff00ff, #00ff99);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientShift 3s ease infinite;
+    cursor: pointer;
+    transition: transform 0.3s ease, filter 0.3s ease;
+    text-shadow: 0 0 20px rgba(0, 255, 153, 0.5);
+    -webkit-text-stroke: 0.5px rgba(0, 255, 153, 0.3);
+}
+
+.animated-logo:hover {
+    transform: scale(1.1) rotateY(10deg);
+    filter: drop-shadow(0 0 10px #00ff99);
+}
+
+.search-bar {
+    flex: 1;
+    max-width: 600px;
+    display: flex;
+    gap: 10px;
+}
+
+.search-bar button {
+    display: none;
+}
+
+.navbar-bottom {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 10px;
+}
+
+/* USER MENU */
+.user-menu-container {
+    position: relative;
+    display: inline-block;
+}
+
+.user-btn {
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    background-color: #3b2d5c;
+    padding: 8px 14px;
+    border-radius: 4px;
+    transition: all 0.3s;
+    border: none;
+    cursor: pointer;
+}
+
+.user-btn img {
+    position: relative;
+    top: 2px;
+}
+
+.user-btn:hover {
+    background-color: #00ff99;
+    color: #000;
+}
+
+.user-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: linear-gradient(135deg, #2c1e4a, #3b2d5c);
+    border: 1px solid #5c4d7c;
+    border-radius: 6px;
+    min-width: 200px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    z-index: 10000;
+    margin-top: 5px;
+    transition: opacity 0.2s ease;
+}
+
+.user-menu-container:hover .user-dropdown,
+.user-dropdown.active {
+    display: block;
+}
+
+.user-dropdown-item {
+    display: block;
+    padding: 12px 16px;
+    color: #ddd;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border-bottom: 1px solid #5c4d7c;
+}
+
+.user-dropdown-item:last-child {
+    border-bottom: none;
+}
+
+.user-dropdown-item:hover {
+    background-color: rgba(0, 255, 153, 0.1);
+    color: #00ff99;
+    padding-left: 20px;
+}
+
+/* SIDEBAR */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -300px;
+    width: 300px;
+    height: 100%;
+    background: linear-gradient(135deg, #2c1e4a 0%, #3b2d5c 100%);
+    color: #fff;
+    padding: 20px;
+    transition: left 0.3s ease;
+    z-index: 9999;
+    border-right: 1px solid #5c4d7c;
+}
+
+.sidebar.active {
+    left: 0;
+}
+
+.sidebar h3 {
+    margin-top: 0;
+    color: #00cc88;
+    font-size: 1.4em;
+    margin-bottom: 18px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar ul li {
+    margin: 15px 0;
+    overflow: visible;
+}
+
+.sidebar ul li a {
+    color: #ddd;
+    text-decoration: none;
+    font-size: 1.05em;
+    transition: color 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 5px 0;
+}
+
+.sidebar ul li a:hover {
+    color: #00cc88;
+}
+
+.sidebar ul li a img {
+    width: 26px;
+    height: 26px;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: #ff4d4d;
+    font-size: 20px;
+    float: right;
+    cursor: pointer;
+}
+
+/* FOOTER */
+.footer {
+    background: linear-gradient(135deg, #0a0f1f 0%, #1a0f2e 100%);
+    padding: 50px 0 30px;
+    color: #aaa;
+    margin-top: 40px;
+    border-top: 1px solid #5c4d7c;
+}
+
+.footer-columns {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto 20px;
+    padding: 0 30px;
+    box-sizing: border-box;
+}
+
+.footer h4 {
+    color: #00cc88;
+    margin-bottom: 10px;
+}
+
+.footer-bottom {
+    text-align: center;
+    font-size: 14px;
+    color: #999999;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 30px;
+    box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+    .navbar-top {
+        flex-direction: column;
+    }
+
+    .search-bar {
+        max-width: 100%;
+    }
+
+    .navbar-bottom {
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .sidebar {
+        width: 220px;
+    }
+}

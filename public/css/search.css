@@ -1,0 +1,19 @@
+.search-page-hero {
+    padding: 20px 0;
+}
+
+.search-page-hero h1 {
+    font-size: 1.5em;
+}
+
+.search-results-card {
+    cursor: pointer;
+}
+
+.search-results-image {
+    background: #1a1a3e;
+}
+
+.search-results-title {
+    font-size: 1.1em;
+}

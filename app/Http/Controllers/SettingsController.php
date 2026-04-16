@@ -27,15 +27,15 @@ class SettingsController extends Controller
             'card_cvv' => 'nullable|regex:/^\d{3,4}$/',
             'delete_card' => 'nullable|boolean',
         ], [
-            'name.required' => 'A név megadása kötelező.',
-            'email.required' => 'Az e-mail cím megadása kötelező.',
-            'email.email' => 'Az e-mail cím formátuma érvénytelen.',
-            'email.unique' => 'Ez az e-mail cím már foglalt.',
-            'password.min' => 'A jelszó legalább 6 karakter hosszú kell, hogy legyen.',
-            'password.confirmed' => 'A jelszó megerősítés nem egyezik.',
-            'card_number.regex' => 'A kártya száma érvénytelen (pl: 1234 5678 9012 3456).',
-            'card_expiry.regex' => 'A lejárat formátuma érvénytelen (pl: 01/25).',
-            'card_cvv.regex' => 'A CVV 3-4 számjegy kell, hogy legyen.',
+            'name.required' => 'Name is required.',
+            'email.required' => 'Email address is required.',
+            'email.email' => 'The email address format is invalid.',
+            'email.unique' => 'This email address is already in use.',
+            'password.min' => 'The password must be at least 6 characters long.',
+            'password.confirmed' => 'The password confirmation does not match.',
+            'card_number.regex' => 'The card number is invalid (e.g. 1234 5678 9012 3456).',
+            'card_expiry.regex' => 'The expiry date format is invalid (e.g. 01/25).',
+            'card_cvv.regex' => 'The CVV must be 3-4 digits.',
         ]);
 
         // Jelszó módosítása
@@ -72,9 +72,9 @@ class SettingsController extends Controller
 
         $user->save();
 
-        $message = 'Beállítások sikeresen mentve!';
+        $message = 'Settings saved successfully.';
         if ($request->has('delete_card') && $request->delete_card) {
-            $message = 'Kártya sikeresen törölve! Beállítások mentve.';
+            $message = 'Card removed successfully. Settings saved.';
         }
 
         return redirect()->route('settings.show')->with('success', $message);

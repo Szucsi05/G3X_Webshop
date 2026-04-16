@@ -1,0 +1,212 @@
+.hidden {
+    display: none !important;
+}
+
+.search-form {
+    display: flex;
+    width: 100%;
+}
+
+.nav-btn-inline,
+.btn-inline-icon,
+.link-inline-icon,
+.dropdown-item-inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.nav-btn-inline,
+.dropdown-item-inline {
+    display: flex;
+}
+
+.icon-18 {
+    width: 18px;
+    height: 18px;
+}
+
+.icon-22 {
+    width: 22px;
+    height: 22px;
+}
+
+.icon-24 {
+    width: 24px;
+    height: 24px;
+}
+
+.icon-28 {
+    width: 28px;
+    height: 28px;
+}
+
+.icon-32 {
+    width: 32px;
+    height: 32px;
+}
+
+.icon-48 {
+    width: 48px;
+    height: 48px;
+}
+
+.icon-72 {
+    width: 72px;
+    height: 72px;
+}
+
+.icon-80 {
+    width: 80px;
+    height: 80px;
+}
+
+.icon-contain {
+    object-fit: contain;
+}
+
+.icon-cover {
+    object-fit: cover;
+}
+
+.icon-no-shrink {
+    flex-shrink: 0;
+}
+
+.text-primary {
+    color: #00ff99;
+}
+
+.text-secondary {
+    color: #cccccc;
+}
+
+.text-muted {
+    color: #7d6b9f;
+}
+
+.text-black {
+    color: #000;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.mt-12 {
+    margin-top: 12px;
+}
+
+.mt-20 {
+    margin-top: 20px;
+}
+
+.mt-30 {
+    margin-top: 30px;
+}
+
+.mb-10 {
+    margin-bottom: 10px;
+}
+
+.mb-20 {
+    margin-bottom: 20px;
+}
+
+.mb-30 {
+    margin-bottom: 30px;
+}
+
+.mx-auto {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.flex {
+    display: flex;
+}
+
+.flex-center {
+    display: flex;
+    align-items: center;
+}
+
+.flex-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.flex-wrap {
+    flex-wrap: wrap;
+}
+
+.justify-center {
+    justify-content: center;
+}
+
+.gap-8 {
+    gap: 8px;
+}
+
+.gap-10 {
+    gap: 10px;
+}
+
+.gap-12 {
+    gap: 12px;
+}
+
+.gap-15 {
+    gap: 15px;
+}
+
+.w-full {
+    width: 100%;
+}
+
+.badge-alert {
+    background: red;
+    color: #fff;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 12px;
+    margin-left: 5px;
+}
+
+.card-badge-visible {
+    display: inline;
+}
+
+.card-badge-hidden {
+    display: none;
+}
+
+.heading-with-icon {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.section-heading-with-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    line-height: 1;
+}
+
+.page-heading {
+    color: #00ff99;
+    margin: 0;
+}
+
+.block-link {
+    display: inline-block;
+}

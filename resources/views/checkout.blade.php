@@ -1,308 +1,103 @@
 <!DOCTYPE html>
-<html lang="hu">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Fizetés - G3X</title>
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <title>Checkout - G3X</title>
+    <link rel="stylesheet" href="{{ asset('css/base.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/layout.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/components.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/utilities.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/checkout.css') }}">
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}" sizes="any">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        .checkout-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 120px 20px 20px 20px;
-            background: #0b1c2c;
-            color: #fff;
-            border-radius: 8px;
-        }
-        .checkout-content {
-            display: flex;
-            gap: 30px;
-        }
-        .checkout-left {
-            flex: 1;
-        }
-        .checkout-right {
-            flex: 1;
-            background: #142c45;
-            padding: 20px;
-            border-radius: 8px;
-            height: fit-content;
-        }
-        .order-summary h2 {
-            color: #00ff99;
-            margin-bottom: 20px;
-            font-size: 24px;
-        }
-        .order-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid #3b2d5c;
-            font-size: 14px;
-        }
-        .order-item:last-child {
-            border-bottom: none;
-        }
-        .order-item-name {
-            color: #fff;
-        }
-        .order-item-qty {
-            color: #cccccc;
-        }
-        .order-item-amount {
-            color: #00ff99;
-            font-weight: bold;
-        }
-        .order-total {
-            display: flex;
-            justify-content: space-between;
-            padding: 15px 0;
-            margin-top: 15px;
-            border-top: 2px solid #00ff99;
-            font-size: 18px;
-            font-weight: bold;
-            color: #00ff99;
-        }
-        .payment-section h3 {
-            color: #00ff99;
-            margin-bottom: 15px;
-            font-size: 18px;
-        }
-        .payment-method-info {
-            background: #0b1c2c;
-            padding: 15px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            color: #cccccc;
-            font-size: 14px;
-        }
-        .payment-form {
-            background: #0b1c2c;
-            padding: 20px;
-            border-radius: 6px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group label {
-            display: block;
-            color: #00ff99;
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: 10px;
-            background: #3b2d5c;
-            color: #fff;
-            border: 1px solid #5c4d7c;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-        .form-group input:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: #00ff99;
-            box-shadow: 0 0 5px rgba(0, 255, 153, 0.3);
-        }
-        .form-row {
-            display: flex;
-            gap: 15px;
-        }
-        .form-row .form-group {
-            flex: 1;
-        }
-        .btn-complete {
-            width: 100%;
-            padding: 12px;
-            background: #00ff99;
-            color: #000;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 16px;
-            margin-top: 20px;
-            transition: background 0.3s;
-        }
-        .btn-complete:hover {
-            background: #00cc7a;
-        }
-        .btn-back {
-            color: #00ff99;
-            text-decoration: none;
-            display: inline-block;
-            margin-top: 20px;
-        }
-        .payment-badge {
-            display: inline-block;
-            background: #2c1e4a;
-            color: #00ff99;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            margin-bottom: 15px;
-        }
-        .secure-badge {
-            text-align: center;
-            color: #00ff99;
-            font-size: 12px;
-            margin-top: 15px;
-        }
-    </style>
 </head>
 <body>
-    <!-- NAVBAR -->
-    <nav class="navbar">
-        <div class="navbar-top">
-            <a href="{{ route('home') }}" class="logo-link">
-                <div class="animated-logo">G3X</div>
-            </a>
-            <div class="search-bar">
-                <form method="GET" action="{{ route('search') }}" style="display: flex; width: 100%;">
-                    <input type="text" name="q" placeholder="Keresés játékokra, ajándékkártyákra..." style="padding: 12px 16px; font-size: 1.1em; flex: 1; border: 1px solid #5c4d7c; background: #3b2d5c; color: #fff; border-radius: 6px;">
-                </form>
-            </div>
-            <div class="nav-right">
-                <a href="#" class="nav-btn" style="display: flex; align-items: center; gap: 8px;" onclick="toggleSidebar()"><img src="{{ asset('icons/category.png') }}" alt="Kategóriák" style="width: 18px; height: 18px;"> Kategóriák</a>
-                @auth
-                    <div class="user-menu-container">
-                        <button class="user-btn">👤 {{ Auth::user()->name }}</button>
-                        <div class="user-dropdown" id="user-dropdown">
-                            <a href="{{ route('settings.show') }}" class="user-dropdown-item">⚙️ Beállítások</a>
-                            <a href="{{ route('orders.index') }}" class="user-dropdown-item">📋 Rendeléseim</a>
-                            <a href="{{ route('logout') }}" class="user-dropdown-item" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">🚪 Kijelentkezés</a>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">@csrf</form>
-                        </div>
-                    </div>
-                @else
-                    <a href="{{ route('register') }}" class="nav-btn" style="display: flex; align-items: center; gap: 8px;"><img src="{{ asset('icons/registration.png') }}" alt="Regisztráció" style="width: 18px; height: 18px;"> Regisztráció</a>
-                    <a href="{{ route('login') }}" class="nav-btn" style="display: flex; align-items: center; gap: 8px;"><img src="{{ asset('icons/login.png') }}" alt="Bejelentkezés" style="width: 18px; height: 18px;"> Bejelentkezés</a>
-                @endauth
-                <a href="{{ route('cart.index') }}" class="nav-btn" style="display: flex; align-items: center; gap: 8px;"><img src="{{ asset('icons/cart.png') }}" alt="Kosár" style="width: 18px; height: 18px;"> cart <span id="cart-badge" style="background: red; color: white; border-radius: 50%; padding: 2px 6px; font-size: 12px; margin-left: 5px; display: {{ session('cart') ? 'inline' : 'none' }};">{{ session('cart') ? array_sum(array_column(session('cart'), 'quantity')) : '' }}</span></a>
-            </div>
-        </div>
-    </nav>
+    @include('partials.site-navbar')
 
     <div class="checkout-container">
-        <div style="margin-bottom: 30px;">
-            <h1 style="color: #00ff99; margin: 0;">💳 Fizetés</h1>
+        <div class="checkout-header">
+            <h1 class="page-heading">Payment Details</h1>
         </div>
 
         <div class="checkout-content">
-            <!-- Left side - Payment Form -->
             <div class="checkout-left">
                 <div class="payment-form">
-                    @php
-                        $paymentMethods = [
-                            'card' => 'Bankkártya',
-                            'paypal' => 'PayPal',
-                            'google_pay' => 'Google Pay',
-                            'apple_pay' => 'Apple Pay'
-                        ];
-                        $methodName = $paymentMethods[$payment_method] ?? 'Ismeretlen';
-                    @endphp
-                    
-                    <div class="payment-method-info">
-                        <span class="payment-badge">{{ $methodName }}</span>
-                    </div>
-
-                    <h3 style="color: #00ff99;">Fizetési adatok</h3>
-
                     <form id="payment-form" method="POST" action="{{ route('checkout.process') }}">
                         @csrf
-
-                        <div class="form-group">
-                            <label>E-mail cím</label>
-                            <input type="email" name="email" placeholder="your@email.com" required>
-                        </div>
 
                         <input type="hidden" name="payment_method" value="{{ $payment_method }}">
 
                         @if($payment_method === 'card')
-                            <!-- Bankkártya adatok -->
-                            <div id="card-form" style="display: block;">
+                            <div id="card-form" class="checkout-card-form">
                                 <div class="form-group">
-                                    <label>Kártyaszám (16 szám)</label>
+                                    <label>Cardholder Name</label>
+                                    <input type="text" name="card_name" placeholder="John Doe" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Card Number (16 digits)</label>
                                     <input type="text" name="card_number" placeholder="1234 5678 9012 3456" pattern="\d{4} \d{4} \d{4} \d{4}" maxlength="19" required>
                                 </div>
 
                                 <div class="form-row">
                                     <div class="form-group">
-                                        <label>Lejárat (HH/ÉÉ)</label>
+                                        <label>Expiry Date (MM/YY)</label>
                                         <input type="text" name="card_expiry" placeholder="MM/YY" pattern="\d{2}/\d{2}" maxlength="5" required>
                                     </div>
                                     <div class="form-group">
-                                        <label>CVC (3 szám)</label>
+                                        <label>CVC (3 digits)</label>
                                         <input type="password" name="card_cvc" placeholder="•••" pattern="\d{3}" maxlength="3" required>
                                     </div>
                                 </div>
-
-                                <div class="form-group">
-                                    <label>Kártyabirtokos neve</label>
-                                    <input type="text" name="card_name" placeholder="John Doe" required>
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Ország</label>
-                                    <select name="country" required>
-                                        <option value="">Válassz országot</option>
-                                        <option value="HU" selected>🇭🇺 Magyarország</option>
-                                        <option value="GB">🇬🇧 Egyesült Királyság</option>
-                                        <option value="DE">🇩🇪 Németország</option>
-                                        <option value="AT">🇦🇹 Ausztria</option>
-                                        <option value="FR">🇫🇷 Franciaország</option>
-                                        <option value="US">🇺🇸 Amerikai Egyesült Államok</option>
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Irányítószám (max 4 szám)</label>
-                                    <input type="text" name="postal_code" placeholder="1234" pattern="\d{1,4}" maxlength="4" required>
-                                </div>
-
                             </div>
                         @elseif($payment_method === 'paypal')
                             <div class="form-group">
-                                <label>PayPal E-mail cím</label>
+                                <label>PayPal Email Address</label>
                                 <input type="email" name="paypal_email" placeholder="your@email.com" required>
                             </div>
-                            <p style="color: #cccccc; font-size: 13px; margin-top: 10px;">A PayPal-ra leszünk irányítva az ön adatainak megerősítéséhez.</p>
+                            <div class="form-group">
+                                <label>PayPal Password</label>
+                                <input type="password" name="paypal_password" placeholder="Password" required>
+                            </div>
+                            <p class="checkout-note">You will be redirected to PayPal to confirm your details.</p>
                         @elseif($payment_method === 'google_pay')
                             <div class="form-group">
-                                <label>Google fiók e-mail</label>
+                                <label>Google Account Email</label>
                                 <input type="email" name="google_email" placeholder="your@gmail.com" required>
                             </div>
-                            <p style="color: #cccccc; font-size: 13px; margin-top: 10px;">A Google Pay fiókja lesz használva a fizetéshez.</p>
+                            <div class="form-group">
+                                <label>Google Account Password</label>
+                                <input type="password" name="google_password" placeholder="Password" required>
+                            </div>
+                            <p class="checkout-note">Your Google Pay account will be used for payment.</p>
                         @elseif($payment_method === 'apple_pay')
                             <div class="form-group">
-                                <label>Apple fiók e-mail</label>
+                                <label>Apple Account Email</label>
                                 <input type="email" name="apple_email" placeholder="your@icloud.com" required>
                             </div>
-                            <p style="color: #cccccc; font-size: 13px; margin-top: 10px;">Az Apple Pay biztonsági módszere lesz használva a fizetéshez.</p>
+                            <div class="form-group">
+                                <label>Apple Account Password</label>
+                                <input type="password" name="apple_password" placeholder="Password" required>
+                            </div>
+                            <p class="checkout-note">Apple Pay security verification will be used for this payment.</p>
                         @endif
 
-                        <button type="submit" class="btn-complete">✅ Fizetés megerősítése</button>
+                        <button type="submit" class="btn-complete">Confirm Payment</button>
                     </form>
-
-                    <div class="secure-badge">🔒 100% Biztonságos & Védett Fizetés</div>
                 </div>
             </div>
 
-            <!-- Right side - Order Summary -->
             <div class="checkout-right">
                 <div class="order-summary">
-                    <h2>📋 Rendelés összefoglalása</h2>
+                    <h2>Order Summary</h2>
 
                     @foreach($cart as $id => $item)
                         <div class="order-item">
                             <div>
                                 <div class="order-item-name">{{ $item['name'] }}</div>
-                                <div class="order-item-qty" style="font-size: 12px; margin-top: 3px;">
-                                    Eladó: {{ $item['seller'] ?? 'N/A' }} | Mennyiség: {{ $item['quantity'] }}
+                                <div class="order-item-qty">
+                                    Seller: {{ $item['seller'] ?? 'N/A' }} | Quantity: {{ $item['quantity'] }}
                                 </div>
                             </div>
                             <div class="order-item-amount">
@@ -312,58 +107,21 @@
                     @endforeach
 
                     <div class="order-total">
-                        <span>Összesen:</span>
+                        <span>Total:</span>
                         <span>{{ number_format($total, 0, ',', ' ') }} Ft</span>
                     </div>
                 </div>
             </div>
         </div>
 
-        <a href="{{ route('checkout.payment') }}" class="btn-back">← Vissza a fizetési mód választáshoz</a>
+        <a href="{{ route('checkout.payment') }}" class="btn-back"><img src="{{ asset('icons/green_left_arrow.png') }}" alt="Back" class="icon-18"> Back to Payment Method</a>
     </div>
 
-    <!-- SIDEBAR -->
-    <div id="sidebar" class="sidebar">
-        <button class="close-btn" onclick="toggleSidebar()">✖</button>
-        <h3>Kategóriák</h3>
-        <ul>
-            <li><a href="{{ route('filter.show', 'pc-games') }}" onclick="localStorage.removeItem('filterState');" style="display: flex; align-items: center; gap: 8px;"><img src="{{ asset('icons/pc_category.png') }}" alt="PC játékok" style="width: 18px; height: 18px;"> PC Játékok</a></li>
-            <li><a href="{{ route('filter.show', 'console-games') }}" onclick="localStorage.removeItem('filterState');" style="display: flex; align-items: center; gap: 8px;"><img src="{{ asset('icons/console_category.png') }}" alt="Konzol játékok" style="width: 18px; height: 18px;"> Konzol Játékok</a></li>
-            <li><a href="{{ route('filter.show', 'game-subscriptions') }}" onclick="localStorage.removeItem('filterState');" style="display: flex; align-items: center; gap: 8px;"><img src="{{ asset('icons/subcriptions_category.png') }}" alt="Játék előfizetések" style="width: 18px; height: 18px;"> Játék Előfizetések</a></li>
-            <li><a href="{{ route('filter.show', 'software') }}" onclick="localStorage.removeItem('filterState');" style="display: flex; align-items: center; gap: 8px;"><img src="{{ asset('icons/software_category.png') }}" alt="Szoftver" style="width: 18px; height: 18px;"> Szoftver</a></li>
-            <li><a href="{{ route('filter.show') }}" onclick="localStorage.removeItem('filterState');" style="display: flex; align-items: center; gap: 8px;"><img src="{{ asset('icons/all_category.png') }}" alt="Összes termék" style="width: 18px; height: 18px;"> Összes termék</a></li>
-        </ul>
-    </div>
+    @include('partials.site-sidebar')
 
     <script>
-    function toggleSidebar() {
-        const sidebar = document.getElementById('sidebar');
-        sidebar.classList.toggle('active');
-    }
-
-    let userDropdownTimeout;
-
-    function setupUserDropdownDelay() {
-        const userMenuContainer = document.querySelector('.user-menu-container');
-        if (!userMenuContainer) return;
-
-        userMenuContainer.addEventListener('mouseenter', function() {
-            clearTimeout(userDropdownTimeout);
-            const dropdown = this.querySelector('.user-dropdown');
-            if (dropdown) dropdown.classList.add('active');
-        });
-
-        userMenuContainer.addEventListener('mouseleave', function() {
-            const dropdown = this.querySelector('.user-dropdown');
-            userDropdownTimeout = setTimeout(() => {
-                if (dropdown) dropdown.classList.remove('active');
-            }, 300);
-        });
-    }
-
     // Card number formatting
     document.addEventListener('DOMContentLoaded', function() {
-        setupUserDropdownDelay();
         const cardInput = document.querySelector('input[name="card_number"]');
         if (cardInput) {
             cardInput.addEventListener('input', function(e) {
@@ -409,34 +167,7 @@
         // Removed - no longer using saved cards
     });
     </script>
-
-    <!-- FOOTER -->
-    <footer class="footer">
-        <div class="footer-columns">
-            <div>
-                <h4>Kapcsolat</h4>
-                <p>Email: info@g3x.hu</p>
-                <p>Telefon: +36 30 123 4567</p>
-            </div>
-            <div>
-                <h4>GYIK</h4>
-                <p>Fizetés és szállítás</p>
-                <p>Visszatérítés</p>
-                <p>Fiók kezelése</p>
-            </div>
-            <div>
-                <h4>Rólunk</h4>
-                <p>Küldetésünk</p>
-                <p>Karrier</p>
-                <p>Blog</p>
-            </div>
-            <div>
-                <h4>Elérhetőségek</h4>
-                <p>Budapest, Magyarország</p>
-                <p>Nyitvatartás: H-P 9:00-17:00</p>
-            </div>
-        </div>
-        <p class="footer-bottom">© 2025 G3X - Minden jog fenntartva.</p>
-    </footer>
+    @include('partials.site-footer')
+    @include('partials.site-scripts')
 </body>
 </html>

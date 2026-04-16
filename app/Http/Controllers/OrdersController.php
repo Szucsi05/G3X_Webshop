@@ -11,6 +11,7 @@ class OrdersController extends Controller
     public function index()
     {
         $orders = Order::where('user_id', Auth::id())
+            ->with('items')
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -19,11 +20,10 @@ class OrdersController extends Controller
 
     public function show($id)
     {
-        $order = Order::findOrFail($id);
-
-        if ($order->user_id !== Auth::id()) {
-            return redirect()->route('orders.index')->with('error', 'Rendel\u00e9s nem tal\u00e1lhat\u00f3.');
-        }
+        $order = Order::with(['items.productOffer.product', 'items.productOffer.vendor'])
+            ->where('id', $id)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
 
         return view('orders.show', ['order' => $order]);
     }

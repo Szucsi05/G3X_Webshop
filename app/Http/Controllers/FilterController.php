@@ -10,10 +10,10 @@ class FilterController extends Controller
     public function show($category = null)
     {
         $categoryLabels = [
-            'pc_games' => '🖥️ PC Játékok',
-            'console_games' => '🎮 Konzol Játékok',
-            'game_subscriptions' => '🎯 Játék Előfizetések',
-            'software' => '💻 Szoftver',
+            'pc_games' => 'PC Játékok',
+            'console_games' => 'Konzol Játékok',
+            'game_subscriptions' => 'Játék Előfizetések',
+            'software' => 'Szoftver',
         ];
 
         if ($category) {

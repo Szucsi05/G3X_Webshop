@@ -76,6 +76,6 @@ class PlatformController extends Controller
         $platform = Platform::findOrFail($id);
         $platform->delete();
 
-        return response()->json(['message' => 'Platform sikeresen törölve'], 204);
+        return response()->json(['message' => 'Platform deleted successfully.'], 204);
     }
 }

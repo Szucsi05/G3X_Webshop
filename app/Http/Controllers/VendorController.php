@@ -102,6 +102,6 @@ class VendorController extends Controller
         $vendor = Vendor::findOrFail($id);
         $vendor->delete();
 
-        return response()->json(['message' => 'Szállító sikeresen törölve'], 204);
+        return response()->json(['message' => 'Vendor deleted successfully.'], 204);
     }
 }

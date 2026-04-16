@@ -1,0 +1,186 @@
+.checkout-success-page {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0b1c2c 0%, #1a3a52 100%);
+    padding: 120px 20px 40px;
+}
+
+.success-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    color: #fff;
+    border-radius: 8px;
+}
+
+.success-title-block {
+    margin-bottom: 30px;
+}
+
+.success-title {
+    color: #00ff99;
+    margin: 0;
+}
+
+.success-subtitle {
+    color: #ccc;
+    margin-bottom: 30px;
+}
+
+.success-info {
+    background: #142c45;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    border-left: 4px solid #00ff99;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 10px 0;
+    border-bottom: 1px solid #3b2d5c;
+}
+
+.info-row:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    color: #ccc;
+}
+
+.info-value {
+    color: #00ff99;
+    font-weight: 700;
+    text-align: right;
+}
+
+.licenses-section-title {
+    color: #00ff99;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.license-card {
+    background: #142c45;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    border: 1px solid #3b2d5c;
+}
+
+.license-product {
+    color: #00ff99;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.license-seller {
+    color: #ccc;
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+
+.license-key {
+    background: #0b1c2c;
+    padding: 12px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    color: #00ff99;
+    word-break: break-all;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.copy-btn {
+    background: #00ff99;
+    color: #000;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 12px;
+    margin-left: 10px;
+    transition: background 0.2s ease;
+}
+
+.copy-btn:hover {
+    background: #00cc7a;
+}
+
+.copy-btn.copied {
+    background: #4caf50;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.success-action-primary,
+.success-action-secondary {
+    padding: 12px 30px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 16px;
+    text-decoration: none;
+    display: inline-block;
+    transition: background 0.3s;
+}
+
+.success-action-primary {
+    background: #00ff99;
+    color: #000;
+}
+
+.success-action-primary:hover {
+    background: #00cc7a;
+}
+
+.success-action-secondary {
+    background: #3b2d5c;
+    color: #00ff99;
+    border: 1px solid #00ff99;
+}
+
+.success-action-secondary:hover {
+    background: #5c4d7c;
+}
+
+.email-note {
+    background: #2c1e4a;
+    padding: 15px;
+    border-radius: 6px;
+    color: #ccc;
+    font-size: 14px;
+    margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+    .checkout-success-page {
+        padding: 110px 16px 32px;
+    }
+
+    .success-container {
+        padding: 24px 0;
+    }
+
+    .info-row,
+    .license-key {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .info-value {
+        text-align: left;
+    }
+}
