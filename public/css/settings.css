@@ -5,7 +5,7 @@
 
 .settings-shell {
     min-height: 100vh;
-    padding: 120px 20px 40px;
+    padding: 24px var(--page-gutter) 40px;
 }
 
 .settings-container {
@@ -155,16 +155,31 @@
     box-shadow: 0 8px 20px rgba(0, 255, 153, 0.3);
 }
 
-@media (max-width: 640px) {
-    .settings-shell {
-        padding: 110px 16px 32px;
-    }
-
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
     .settings-form {
-        padding: 22px;
+        padding: 20px 16px;
     }
 
     .settings-tabs {
         flex-wrap: wrap;
+        flex-direction: column;
     }
+
+    .settings-tab {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+    .settings-tabs {
+        flex-direction: row;
+        flex-wrap: nowrap;
+    }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
 }

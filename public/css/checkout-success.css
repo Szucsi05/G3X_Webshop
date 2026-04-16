@@ -1,7 +1,7 @@
 .checkout-success-page {
     min-height: 100vh;
     background: linear-gradient(135deg, #0b1c2c 0%, #1a3a52 100%);
-    padding: 120px 20px 40px;
+    padding: calc(var(--navbar-offset) + 24px) var(--page-gutter) 40px;
 }
 
 .success-container {
@@ -165,11 +165,8 @@
     margin-top: 20px;
 }
 
-@media (max-width: 768px) {
-    .checkout-success-page {
-        padding: 110px 16px 32px;
-    }
-
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
     .success-container {
         padding: 24px 0;
     }
@@ -183,4 +180,34 @@
     .info-value {
         text-align: left;
     }
+
+    .success-action-primary,
+    .success-action-secondary,
+    .copy-btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    .license-key .copy-btn {
+        width: min(100%, 280px);
+        margin-left: auto;
+        margin-right: auto;
+        align-self: center;
+    }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
 }

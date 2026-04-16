@@ -1,7 +1,7 @@
  .checkout-details-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 120px 20px 20px;
+    padding: 24px var(--page-gutter) 20px;
     background: #0b1c2c;
     color: #fff;
     border-radius: 8px;
@@ -20,7 +20,8 @@
 }
 
 .checkout-details-content {
-    display: flex;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: 30px;
 }
 
@@ -34,6 +35,12 @@
     padding: 20px;
     border-radius: 8px;
     height: fit-content;
+}
+
+.checkout-details-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
 .form-section {
@@ -179,8 +186,55 @@
     text-decoration: underline;
 }
 
-@media (max-width: 900px) {
-    .checkout-details-content {
-        flex-direction: column;
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+    .checkout-details-right,
+    .form-section {
+        padding: 16px;
     }
+
+    .toggle-section,
+    .order-item,
+    .order-total {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+    .checkout-details-container {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+    .checkout-details-content {
+        grid-template-columns: minmax(0, 1fr) minmax(320px, 420px);
+        align-items: start;
+    }
+
+    .checkout-details-left {
+        grid-column: 1;
+    }
+
+    .checkout-details-right {
+        grid-column: 2;
+        grid-row: 1 / span 2;
+    }
+
+    .checkout-details-actions {
+        grid-column: 1;
+        grid-row: 2;
+    }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
 }

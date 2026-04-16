@@ -3,47 +3,52 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use Illuminate\Http\Request;
 
 class FilterController extends Controller
 {
     public function show($category = null)
     {
         $categoryLabels = [
-            'pc_games' => 'PC Játékok',
-            'console_games' => 'Konzol Játékok',
-            'game_subscriptions' => 'Játék Előfizetések',
-            'software' => 'Szoftver',
+            'pc_games' => 'PC Games',
+            'console_games' => 'Console Games',
+            'game_subscriptions' => 'Subscriptions',
+            'software' => 'Software',
         ];
+
+        $productsQuery = Product::query()
+            ->with('category')
+            ->withCount('offers')
+            ->withMin('offers', 'price')
+            ->orderBy('id');
 
         if ($category) {
             switch ($category) {
                 case 'pc_games':
-                    $products = Product::where('platform_type', 'pc')
-                        ->whereHas('category', fn($q) => $q->where('name', 'Játék'))
-                        ->get();
+                    $productsQuery
+                        ->where('platform_type', 'pc')
+                        ->whereHas('category', fn($q) => $q->where('name', 'Játék'));
                     break;
                 case 'console_games':
-                    $products = Product::whereIn('platform_type', ['ps4', 'ps5', 'xbox', 'nintendo'])
-                        ->whereHas('category', fn($q) => $q->where('name', 'Játék'))
-                        ->get();
+                    $productsQuery
+                        ->whereIn('platform_type', ['ps4', 'ps5', 'xbox', 'nintendo'])
+                        ->whereHas('category', fn($q) => $q->where('name', 'Játék'));
                     break;
                 case 'game_subscriptions':
-                    $products = Product::whereHas('category', fn($q) => $q->where('name', 'Előfizetés'))->get();
+                    $productsQuery->whereHas('category', fn($q) => $q->where('name', 'Előfizetés'));
                     break;
                 case 'software':
-                    $products = Product::whereHas('category', fn($q) => $q->where('name', 'Szoftver'))->get();
+                    $productsQuery->whereHas('category', fn($q) => $q->where('name', 'Szoftver'));
                     break;
                 default:
-                    $products = Product::all();
                     break;
             }
-            $categoryLabel = $categoryLabels[$category] ?? 'Összes Termék';
+            $categoryLabel = $categoryLabels[$category] ?? 'All Games';
         } else {
-            $products = Product::all();
             $category = null;
-            $categoryLabel = 'Összes Termék';
+            $categoryLabel = 'All Games';
         }
+
+        $products = $productsQuery->paginate(28)->withQueryString();
 
         return view('filter', compact('products', 'category', 'categoryLabel'));
     }

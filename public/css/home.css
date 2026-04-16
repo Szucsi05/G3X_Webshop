@@ -2,7 +2,7 @@
     background: linear-gradient(135deg, #0a1428 0%, #1a1a3e 50%, #2c1e4a 100%);
     position: relative;
     overflow: hidden;
-    padding: 120px 30px;
+    padding: 56px var(--page-gutter) 72px;
 }
 
 .hero-orb-right,
@@ -114,7 +114,54 @@
     box-shadow: 0 4px 15px rgba(0, 204, 136, 0.3);
 }
 
-@media (max-width: 768px) {
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+    .hero-title {
+        font-size: 2em;
+    }
+
+    .hero-copy {
+        font-size: 1em;
+    }
+
+    .home-section-title {
+        font-size: 1.6em;
+        flex-wrap: wrap;
+    }
+
+    .hero-primary,
+    .hero-secondary,
+    .view-all-btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    .hero-orb-right {
+        width: 320px;
+        height: 320px;
+        right: -30%;
+    }
+
+    .hero-orb-left {
+        width: 260px;
+        height: 260px;
+        left: -20%;
+    }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+    .home-hero {
+        padding: 64px var(--page-gutter) 80px;
+    }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+    .home-hero {
+        padding-top: 72px;
+    }
+
     .hero-title {
         font-size: 2.4em;
     }
@@ -125,5 +172,32 @@
 
     .home-section-title {
         font-size: 1.8em;
+    }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+
+    .hero-title {
+        font-size: 3em;
+    }
+
+    .hero-copy {
+        font-size: 1.2em;
+    }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+    .hero-title {
+        font-size: 3.5em;
+    }
+
+    .hero-copy {
+        font-size: 1.4em;
+    }
+
+    .home-section-title {
+        font-size: 2.5em;
     }
 }

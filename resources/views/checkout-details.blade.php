@@ -122,11 +122,7 @@
                             </div>
                         </div>
                     </div>
-
-                    <button type="submit" class="btn-complete checkout-details-submit">Continue to Payment <img src="{{ asset('icons/black_right_arrow.png') }}" alt="Continue" class="icon-18"></button>
                 </form>
-
-                <a href="{{ route('cart.index') }}" class="back-link"><img src="{{ asset('icons/green_left_arrow.png') }}" alt="Back" class="icon-18"> Back to Cart</a>
             </div>
 
             <div class="checkout-details-right">
@@ -154,6 +150,12 @@
                         <span>{{ number_format($total, 0, ',', ' ') }} Ft</span>
                     </div>
                 </div>
+            </div>
+
+            <div class="checkout-details-actions">
+                <button type="submit" form="details-form" class="btn-complete checkout-details-submit">Continue to Payment <img src="{{ asset('icons/black_right_arrow.png') }}" alt="Continue" class="icon-18"></button>
+
+                <a href="{{ route('cart.index') }}" class="back-link"><img src="{{ asset('icons/green_left_arrow.png') }}" alt="Back" class="icon-18"> Back to Cart</a>
             </div>
         </div>
     </div>

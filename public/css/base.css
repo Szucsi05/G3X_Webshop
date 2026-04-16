@@ -1,8 +1,16 @@
+:root {
+    --page-gutter: 16px;
+    --content-gutter: 20px;
+    --navbar-offset: 208px;
+}
+
 body {
     margin: 0;
     font-family: 'Segoe UI', sans-serif;
     background-color: #0b1c2c;
     color: #ffffff;
+    overflow-x: hidden;
+    padding-top: var(--navbar-offset);
 }
 
 a {
@@ -18,6 +26,44 @@ textarea {
 
 * {
     box-sizing: border-box;
+}
+
+img,
+svg,
+video,
+canvas {
+    max-width: 100%;
+}
+
+@media only screen and (min-width: 600px) {
+    :root {
+        --page-gutter: 20px;
+        --content-gutter: 24px;
+        --navbar-offset: 188px;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    :root {
+        --page-gutter: 24px;
+        --content-gutter: 28px;
+        --navbar-offset: 152px;
+    }
+}
+
+@media only screen and (min-width: 992px) {
+    :root {
+        --page-gutter: 28px;
+        --content-gutter: 32px;
+        --navbar-offset: 96px;
+    }
+}
+
+@media only screen and (min-width: 1200px) {
+    :root {
+        --page-gutter: 32px;
+        --content-gutter: 36px;
+    }
 }
 
 @keyframes gradientShift {

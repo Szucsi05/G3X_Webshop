@@ -1,5 +1,5 @@
 .search-page-hero {
-    padding: 20px 0;
+    padding: 24px var(--page-gutter) 16px;
 }
 
 .search-page-hero h1 {
@@ -16,4 +16,8 @@
 
 .search-results-title {
     font-size: 1.1em;
+}
+
+.cards-section .pagination-nav {
+    padding-bottom: 20px;
 }

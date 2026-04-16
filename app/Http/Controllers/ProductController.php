@@ -16,15 +16,22 @@ class ProductController extends Controller
     public function search(Request $request)
     {
         $query = $request->get('q');
-        
+
+        $productsQuery = Product::query()
+            ->with('category')
+            ->withCount('offers')
+            ->withMin('offers', 'price')
+            ->orderBy('id');
+
         if ($query) {
-            $products = Product::where('name', 'like', "%{$query}%")
+            $productsQuery->where(function ($builder) use ($query) {
+                $builder->where('name', 'like', "%{$query}%")
                 ->orWhere('description', 'like', "%{$query}%")
-                ->with('category')
-                ->get();
-        } else {
-            $products = Product::all();
+                ;
+            });
         }
+
+        $products = $productsQuery->paginate(28)->withQueryString();
 
         return view('search', compact('products', 'query'));
     }

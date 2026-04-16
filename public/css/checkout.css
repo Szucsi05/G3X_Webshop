@@ -1,7 +1,7 @@
  .checkout-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 120px 20px 20px;
+    padding: 24px var(--page-gutter) 20px;
     background: #0b1c2c;
     color: #fff;
     border-radius: 8px;
@@ -120,12 +120,52 @@
     text-decoration: underline;
 }
 
-@media (max-width: 900px) {
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
     .checkout-content {
         flex-direction: column;
     }
 
     .checkout-right {
         margin-top: 0;
+        padding: 16px;
     }
+
+    .payment-form,
+    .order-item,
+    .order-total {
+        padding: 16px;
+    }
+
+    .order-item,
+    .order-total {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+    .checkout-content {
+        flex-direction: column;
+    }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+    .checkout-content {
+        flex-direction: row;
+    }
+
+    .checkout-right {
+        margin-top: 36px;
+    }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
 }

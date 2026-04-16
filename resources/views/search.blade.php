@@ -31,6 +31,9 @@
         @else
             <p>All products</p>
         @endif
+        @if($products->total() > 0)
+            <p>{{ $products->total() }} products</p>
+        @endif
     </header>
 
     <section class="cards-section">
@@ -41,17 +44,16 @@
                 @foreach($products as $product)
                     @php
                         $imagePath = $product->image && file_exists(public_path($product->image)) ? $product->image : 'images/default-product.svg';
-                        $offers = $product->offers()->orderBy('price')->get();
-                        $minPrice = $offers->first()?->price;
+                        $minPrice = $product->offers_min_price;
                     @endphp
                     <div class="product-card search-results-card" onclick="localStorage.setItem('lastSearchUrl', window.location.href); localStorage.removeItem('lastFilterUrl'); window.location.href='{{ route('product.show', $product->id) }}'">
                         <img src="{{ asset($imagePath) }}" alt="{{ $product->name }}" class="product-image search-results-image">
                         <div class="product-info">
                             <h3 class="search-results-title">{{ $product->name }}</h3>
-                            <p class="product-description">{{ $product->offers->count() }} offers - {{ $categoryTranslations[$product->category?->name] ?? ($product->category?->name ?? 'Unknown') }}</p>
+                            <p class="product-description">{{ $product->offers_count }} offers - {{ $categoryTranslations[$product->category?->name] ?? ($product->category?->name ?? 'Unknown') }}</p>
                             <div class="product-footer">
                                 <span class="product-price">
-                                    @if($offers->isEmpty())
+                                    @if($product->offers_count === 0)
                                         No offers available
                                     @elseif($minPrice > 0)
                                         {{ number_format($minPrice, 0, ',', ' ') . ' Ft from' }}
@@ -65,6 +67,8 @@
                     </div>
                 @endforeach
             </div>
+
+            @include('partials.pagination-controls', ['paginator' => $products])
         @endif
     </section>
 

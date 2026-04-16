@@ -1,11 +1,22 @@
 <script>
 let userDropdownTimeout;
 
-function toggleSidebar() {
+function toggleSidebar(forceOpen) {
     const sidebar = document.getElementById('sidebar');
-    if (sidebar) {
-        sidebar.classList.toggle('active');
-    }
+    const overlay = document.getElementById('sidebar-overlay');
+    if (!sidebar || !overlay) return;
+
+    const shouldOpen = typeof forceOpen === 'boolean'
+        ? forceOpen
+        : !sidebar.classList.contains('active');
+
+    sidebar.classList.toggle('active', shouldOpen);
+    overlay.classList.toggle('active', shouldOpen);
+    sidebar.setAttribute('aria-hidden', shouldOpen ? 'false' : 'true');
+}
+
+function closeSidebar() {
+    toggleSidebar(false);
 }
 
 function setupUserDropdownDelay() {
@@ -26,5 +37,13 @@ function setupUserDropdownDelay() {
     });
 }
 
-document.addEventListener('DOMContentLoaded', setupUserDropdownDelay);
+document.addEventListener('DOMContentLoaded', () => {
+    setupUserDropdownDelay();
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            closeSidebar();
+        }
+    });
+});
 </script>

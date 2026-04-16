@@ -23,7 +23,7 @@
             'Előfizetés' => 'Subscriptions',
         ];
 
-        $translatedCategoryLabel = $categoryLabel ?? 'All Products';
+        $translatedCategoryLabel = $categoryLabel ?? 'All Games';
         foreach ($categoryTranslations as $source => $target) {
             $translatedCategoryLabel = str_replace($source, $target, $translatedCategoryLabel);
         }
@@ -33,7 +33,7 @@
         <div class="filter-header">
             <h1>{{ $translatedCategoryLabel }}</h1>
             <span class="results-count">
-                {{ count($products) }} products
+                {{ $products->total() }} products
             </span>
         </div>
 
@@ -58,21 +58,20 @@
 
         <!-- Products Grid -->
         <div class="products-grid" id="products-grid">
-            @if(count($products) > 0)
+            @if($products->count() > 0)
                 @foreach($products as $product)
                     @php
                         $imagePath = $product->image && file_exists(public_path($product->image)) ? $product->image : 'images/default-product.svg';
-                        $offers = $product->offers()->orderBy('price')->get();
-                        $minPrice = $offers->first()?->price;
+                        $minPrice = $product->offers_min_price;
                     @endphp
                     <div class="product-card filter-product-card" onclick="goToProduct({{ $product->id }})">
                         <img src="{{ asset($imagePath) }}" alt="{{ $product->name }}" class="product-image filter-product-image">
                         <div class="product-info">
                             <h3>{{ $product->name }}</h3>
-                            <p class="product-description">{{ $product->offers->count() }} offers - {{ $categoryTranslations[$product->category?->name] ?? ($product->category?->name ?? 'Unknown') }}</p>
+                            <p class="product-description">{{ $product->offers_count }} offers - {{ $categoryTranslations[$product->category?->name] ?? ($product->category?->name ?? 'Unknown') }}</p>
                             <div class="product-footer">
                                 <span class="product-price">
-                                    @if($offers->isEmpty())
+                                    @if($product->offers_count === 0)
                                         No offers available
                                     @elseif($minPrice > 0)
                                         {{ number_format($minPrice, 0, ',', '.') . ' Ft' }}
@@ -93,6 +92,8 @@
                 </div>
             @endif
         </div>
+
+        @include('partials.pagination-controls', ['paginator' => $products])
     </div>
 
     <script>

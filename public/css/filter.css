@@ -1,7 +1,7 @@
 .filter-container {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 120px 20px 40px;
+    padding: 24px var(--page-gutter) 40px;
 }
 
 .filter-header {
@@ -92,11 +92,11 @@
     color: #666;
 }
 
-@media (max-width: 768px) {
-    .filter-container {
-        padding: 120px 15px 40px;
-    }
+.filter-container .pagination-nav {
+    margin-bottom: 16px;
+}
 
+@media (max-width: 768px) {
     .filter-header {
         flex-direction: column;
         align-items: flex-start;
@@ -105,5 +105,18 @@
 
     .filter-header h1 {
         font-size: 1.8em;
+    }
+
+    .filter-container .pagination-nav {
+        padding-top: 4px;
+    }
+
+    .category-filter {
+        justify-content: stretch;
+    }
+
+    .category-btn {
+        flex: 1 1 100%;
+        justify-content: center;
     }
 }

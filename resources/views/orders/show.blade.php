@@ -98,23 +98,70 @@
     @include('partials.site-footer')
 
     <script>
+    function fallbackCopyText(text) {
+        const helper = document.createElement('textarea');
+        helper.value = text;
+        helper.setAttribute('readonly', '');
+        helper.style.position = 'fixed';
+        helper.style.opacity = '0';
+        helper.style.pointerEvents = 'none';
+        document.body.appendChild(helper);
+        helper.focus();
+        helper.select();
+
+        let copied = false;
+
+        try {
+            copied = document.execCommand('copy');
+        } finally {
+            document.body.removeChild(helper);
+        }
+
+        return copied;
+    }
+
+    function showCopySuccess(button) {
+        const originalText = button.textContent;
+        button.textContent = 'Copied!';
+        button.classList.add('copied');
+
+        setTimeout(() => {
+            button.textContent = originalText;
+            button.classList.remove('copied');
+        }, 2000);
+    }
+
     function copyToClipboard(elementId, event) {
         const element = document.getElementById(elementId);
-        const text = element.textContent;
-        
-        navigator.clipboard.writeText(text).then(() => {
-            const btn = event.currentTarget;
-            const originalText = btn.textContent;
-            btn.textContent = 'Copied!';
-            btn.classList.add('copied');
-            
-            setTimeout(() => {
-                btn.textContent = originalText;
-                btn.classList.remove('copied');
-            }, 2000);
-        }).catch(err => {
+        const button = event.currentTarget;
+
+        if (!element) {
             alert('Copy failed.');
-        });
+            return;
+        }
+
+        const text = element.textContent.trim();
+
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(text).then(() => {
+                showCopySuccess(button);
+            }).catch(() => {
+                if (fallbackCopyText(text)) {
+                    showCopySuccess(button);
+                    return;
+                }
+
+                alert('Copy failed.');
+            });
+            return;
+        }
+
+        if (fallbackCopyText(text)) {
+            showCopySuccess(button);
+            return;
+        }
+
+        alert('Copy failed.');
     }
 
     </script>
