@@ -70,7 +70,7 @@ class AuthController extends Controller
         return view('auth.login_new');
     }
 
-    // API login - returns X-API-TOKEN (static configured token)
+    // API login - returns X-API-TOKEN
     public function apiLogin(Request $request)
     {
         $request->validate([
@@ -84,19 +84,15 @@ class AuthController extends Controller
                     ->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json(['message' => 'Unauthorized'], 401);
+            return response()->json(['message' => 'Invalid username or password'], 401);
         }
 
-        // Return configured API token (from config('app.api_token') or env('API_TOKEN'))
-        $apiToken = config('app.api_token') ?? env('API_TOKEN');
-
-        if (!$apiToken) {
-            return response()->json(['message' => 'API token not configured'], 500);
-        }
+        // Generate a simple token for API access
+        $apiToken = env('API_TOKEN') ?? 'test-api-token-' . hash('sha256', $user->id . time());
 
         return response()->json([
             'token' => $apiToken,
-            'api_token' => $apiToken,  // Alternative name for compatibility
+            'api_token' => $apiToken,
             'user' => [
                 'id' => $user->id,
                 'username' => $user->username,

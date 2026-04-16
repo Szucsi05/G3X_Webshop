@@ -16,7 +16,7 @@ Route::prefix('v1')->group(function () {
     // Auth - login endpoint (no authentication required)
     Route::post('/login', [AuthController::class, 'apiLogin']);
     
-    // Products
+    // Products (token validated in controller)
     Route::get('/products', [ProductApiController::class, 'index']);
     Route::get('/products/{id}', [ProductApiController::class, 'show']);
     Route::post('/products', [ProductApiController::class, 'store']);
@@ -44,7 +44,7 @@ Route::prefix('v1')->group(function () {
     Route::put('/vendors/{id}', [VendorController::class, 'update']);
     Route::delete('/vendors/{id}', [VendorController::class, 'destroy']);
 
-    // Product Offers (NEW - IMPORTANT)
+    // Product Offers
     Route::get('/product-offers', [ProductOfferController::class, 'index']);
     Route::get('/product-offers/{id}', [ProductOfferController::class, 'show']);
     Route::post('/product-offers', [ProductOfferController::class, 'store']);
@@ -57,7 +57,7 @@ Route::prefix('v1')->group(function () {
     // Product Offers by Vendor
     Route::get('/vendors/{vendorId}/offers', [ProductOfferController::class, 'byVendor']);
 
-    // Orders (NEW - requires authentication)
+    // Orders (requires authentication)
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('/orders', [OrderController::class, 'index']);
         Route::get('/orders/{id}', [OrderController::class, 'show']);
