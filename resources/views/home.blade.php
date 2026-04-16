@@ -24,7 +24,7 @@
         ];
     @endphp
 
-    <!-- HERO -->
+
     <header class="hero home-hero">
         <div class="hero-orb-right"></div>
         <div class="hero-orb-left"></div>
@@ -41,7 +41,7 @@
 
 
 
-    <!-- POPULAR GAMES -->
+
     <section class="cards-section" id="popular">
         <h2 class="home-section-title">Most Popular Games <img src="{{ asset('icons/popular_games.png') }}" alt="Most Popular Games" class="icon-48 icon-no-shrink"></h2>
         <div class="products-grid">
@@ -74,7 +74,7 @@
         </div>
     </section>
 
-    <!-- BEST SELLING -->
+
     <section class="cards-section">
         <h2 class="home-section-title"><img src="{{ asset('icons/best_selling_games.png') }}" alt="Best Selling" class="icon-48 icon-no-shrink"> Best Selling</h2>
         <div class="products-grid">
@@ -107,7 +107,7 @@
         </div>
     </section>
 
-    <!-- CONSOLE GAMES -->
+
     <section class="cards-section" id="console-games">
         <h2 class="home-section-title">Console Games <img src="{{ asset('icons/console_games.png') }}" alt="Console Games" class="icon-48 icon-no-shrink"></h2>
         <div class="products-grid">
@@ -148,7 +148,7 @@
 
     @include('partials.site-footer')
 
-    <!-- JS -->
+
     <script>
     function goToProduct(productId) {
         localStorage.removeItem('lastSearchUrl');
@@ -156,7 +156,6 @@
         window.location.href = '/product/' + productId;
     }
 
-    // Add to cart - simple and direct
     function addToCart(productId) {
         fetch(`/cart/add/${productId}`, {
             method: 'POST',
@@ -169,12 +168,10 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Update badge
                 const badge = document.getElementById('cart-badge');
                 badge.textContent = data.cart_count;
                 badge.style.display = 'inline';
-                
-                // Pulse animation
+
                 badge.style.animation = 'none';
                 setTimeout(() => {
                     badge.style.animation = 'badge-pulse 0.3s ease-in-out';

@@ -17,7 +17,7 @@ class SettingsController extends Controller
     {
         $user = Auth::user();
 
-        // Validáció
+        
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
@@ -38,24 +38,24 @@ class SettingsController extends Controller
             'card_cvv.regex' => 'The CVV must be 3-4 digits.',
         ]);
 
-        // Jelszó módosítása
+        
         if (!empty($validated['password'])) {
             $user->password = Hash::make($validated['password']);
         }
 
-        // Név és email frissítés
+        
         $user->name = $validated['name'];
         $user->email = $validated['email'];
 
-        // Kártya törlés
+        
         if ($request->has('delete_card') && $request->delete_card) {
             $user->card_number = null;
             $user->card_expiry = null;
             $user->card_cvv = null;
         } else {
-            // Kártya adatok frissítés (ha nem disabled az input)
+            
             if (!empty($validated['card_number']) && strpos($validated['card_number'], '*') === false) {
-                // Csak az utolsó 4 számjegy tárolása
+                
                 $cardNumber = preg_replace('/\s+/', '', $validated['card_number']);
                 $user->card_number = $cardNumber;
             }
@@ -65,7 +65,7 @@ class SettingsController extends Controller
             }
 
             if (!empty($validated['card_cvv']) && strpos($validated['card_cvv'], '*') === false) {
-                // CVV titkosítása/hash-elése (alapvető biztonság)
+                
                 $user->card_cvv = hash('sha256', $validated['card_cvv']);
             }
         }

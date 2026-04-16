@@ -37,12 +37,12 @@ Route::get('/filter/{category?}', function($category = null) {
     return app('App\Http\Controllers\FilterController')->show($category);
 })->name('filter.show');
 
-// Settings routes
+
 Route::middleware(['auth'])->group(function () {
     Route::get('/settings', [SettingsController::class, 'show'])->name('settings.show');
     Route::put('/settings', [SettingsController::class, 'update'])->name('settings.update');
     
-    // Orders routes
+    
     Route::get('/orders', [OrdersController::class, 'index'])->name('orders.index');
     Route::get('/orders/{id}', [OrdersController::class, 'show'])->name('orders.show');
 });

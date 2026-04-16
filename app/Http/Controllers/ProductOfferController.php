@@ -9,14 +9,12 @@ use Illuminate\Http\JsonResponse;
 
 class ProductOfferController extends Controller
 {
-    /**
-     * Az összes termék ajánlatait adja vissza
-     */
+    
     public function index(Request $request): JsonResponse
     {
         $query = ProductOffer::with(['product', 'vendor', 'platform']);
 
-        // Szűrés ár alapján
+        
         if ($request->has('min_price')) {
             $query->where('price', '>=', $request->input('min_price'));
         }
@@ -24,27 +22,27 @@ class ProductOfferController extends Controller
             $query->where('price', '<=', $request->input('max_price'));
         }
 
-        // Szűrés eladó alapján
+        
         if ($request->has('vendor_id')) {
             $query->where('vendor_id', $request->input('vendor_id'));
         }
 
-        // Szűrés platform alapján
+        
         if ($request->has('platform_id')) {
             $query->where('platform_id', $request->input('platform_id'));
         }
 
-        // Szűrés termék alapján
+        
         if ($request->has('product_id')) {
             $query->where('product_id', $request->input('product_id'));
         }
 
-        // Csak elérhető ajánlatok
+        
         if ($request->input('available', false)) {
             $query->available();
         }
 
-        // Rendezés
+        
         $sort_by = $request->input('sort_by', 'price');
         $sort_order = $request->input('sort_order', 'asc');
 
@@ -57,9 +55,7 @@ class ProductOfferController extends Controller
         return response()->json($offers);
     }
 
-    /**
-     * Egy konkrét ajánlat részletei
-     */
+    
     public function show(int $id): JsonResponse
     {
         $offer = ProductOffer::with(['product', 'vendor', 'platform'])->findOrFail($id);
@@ -67,15 +63,13 @@ class ProductOfferController extends Controller
         return response()->json($offer);
     }
 
-    /**
-     * Egy termék összes ajánlatait adja vissza
-     */
+    
     public function byProduct(int $productId, Request $request): JsonResponse
     {
         $product = Product::findOrFail($productId);
         $query = $product->offers()->with(['vendor', 'platform']);
 
-        // Rendezés ár alapján (default)
+        
         $sort_by = $request->input('sort_by', 'price');
         $sort_order = $request->input('sort_order', 'asc');
 
@@ -94,9 +88,7 @@ class ProductOfferController extends Controller
         ]);
     }
 
-    /**
-     * Egy eladó összes ajánlatait adja vissza
-     */
+    
     public function byVendor(int $vendorId): JsonResponse
     {
         $offers = ProductOffer::where('vendor_id', $vendorId)
@@ -106,9 +98,7 @@ class ProductOfferController extends Controller
         return response()->json($offers);
     }
 
-    /**
-     * Új ajánlat létrehozása (csak admin/eladó)
-     */
+    
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
@@ -132,9 +122,7 @@ class ProductOfferController extends Controller
         }
     }
 
-    /**
-     * Ajánlat módosítása
-     */
+    
     public function update(int $id, Request $request): JsonResponse
     {
         $offer = ProductOffer::findOrFail($id);
@@ -152,9 +140,7 @@ class ProductOfferController extends Controller
         return response()->json($offer->load(['product', 'vendor', 'platform']));
     }
 
-    /**
-     * Ajánlat törlése
-     */
+    
     public function destroy(int $id): JsonResponse
     {
         $offer = ProductOffer::findOrFail($id);

@@ -186,7 +186,7 @@
     text-decoration: underline;
 }
 
-/* Extra small devices (phones, 600px and down) */
+
 @media only screen and (max-width: 600px) {
     .checkout-details-right,
     .form-section {
@@ -201,11 +201,11 @@
     }
 }
 
-/* Small devices (portrait tablets and large phones, 600px and up) */
+
 @media only screen and (min-width: 600px) {
 }
 
-/* Medium devices (landscape tablets, 768px and up) */
+
 @media only screen and (min-width: 768px) {
     .checkout-details-container {
         padding-left: 20px;
@@ -213,7 +213,7 @@
     }
 }
 
-/* Large devices (laptops/desktops, 992px and up) */
+
 @media only screen and (min-width: 992px) {
     .checkout-details-content {
         grid-template-columns: minmax(0, 1fr) minmax(320px, 420px);
@@ -235,6 +235,6 @@
     }
 }
 
-/* Extra large devices (large laptops and desktops, 1200px and up) */
+
 @media only screen and (min-width: 1200px) {
 }

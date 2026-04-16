@@ -21,7 +21,7 @@
         </div>
 
         <div class="checkout-details-content">
-            <!-- Left side - Form -->
+
             <div class="checkout-details-left">
                 <form id="details-form" method="POST" action="{{ route('checkout.details.store') }}">
                     @csrf
@@ -162,24 +162,20 @@
 
     @include('partials.site-sidebar')
 
-    <!-- JS -->
+
     <script>
     function selectType(type) {
-        // Update hidden input
         document.getElementById('account-type').value = type;
 
-        // Update button styles
         document.querySelectorAll('.toggle-btn').forEach(btn => {
             btn.classList.remove('active');
         });
         document.querySelector(`[data-type="${type}"]`).classList.add('active');
 
-        // Show/hide sections
         if (type === 'personal') {
             document.getElementById('personal-billing').classList.add('active');
             document.getElementById('company-billing').classList.remove('active');
-            
-            // Clear company fields
+
             document.getElementById('billing_company_name').value = '';
             document.getElementById('billing_company_id').value = '';
             document.getElementById('billing_tax_id').value = '';
@@ -189,8 +185,7 @@
         } else {
             document.getElementById('personal-billing').classList.remove('active');
             document.getElementById('company-billing').classList.add('active');
-            
-            // Clear personal fields
+
             document.getElementById('billing_name_personal').value = '';
             document.getElementById('billing_phone_personal').value = '';
             document.getElementById('billing_email_personal').value = '';

@@ -65,7 +65,7 @@
                 <div>
                     <div class="cart-summary">
                         <h3><img src="{{ asset('icons/black_card.png') }}" alt="Order total" class="icon-24"> Order Total</h3>
-                        
+
                         <div class="cart-summary-box">
                             <div class="cart-summary-row">
                                 <span class="cart-summary-text">Products:</span>
@@ -90,7 +90,6 @@
     </div>
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Plus and minus buttons for quantity
         const qtyPlusButtons = document.querySelectorAll('.qty-plus');
         const qtyMinusButtons = document.querySelectorAll('.qty-minus');
 
@@ -116,14 +115,13 @@
             });
         });
 
-        // Remove form handler
         const removeForms = document.querySelectorAll('.remove-form');
         removeForms.forEach(form => {
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
                 const formData = new FormData(form);
                 const itemElement = form.closest('.cart-item-card');
-                
+
                 fetch(form.action, {
                     method: 'POST',
                     body: formData,
@@ -135,14 +133,12 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        // Remove item from DOM with smooth animation
                         itemElement.style.opacity = '0';
                         itemElement.style.transition = 'opacity 0.3s ease';
                         setTimeout(() => {
                             itemElement.remove();
                             updateCartBadge(data.cart_count);
                             updateTotalPrice(data.total);
-                            // Refresh page if cart is empty
                             const remainingItems = document.querySelectorAll('.cart-item-card');
                             if (remainingItems.length === 0) {
                                 setTimeout(() => location.reload(), 300);
@@ -162,7 +158,7 @@
         const quantity = parseInt(input.value);
         const itemCard = form.closest('.cart-item-card');
         const priceSpan = itemCard.querySelector('.cart-item-price');
-        
+
         fetch(form.action, {
             method: 'POST',
             body: formData,
@@ -174,13 +170,11 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Frissítsd az egyedi tétel árát
                 const subtotal = price * quantity;
                 if (priceSpan) {
                     priceSpan.textContent = number_format(subtotal) + ' Ft';
                 }
-                
-                // Frissítsd az összes ár
+
                 updateCartBadge(data.cart_count);
                 updateTotalPrice(data.total);
             }

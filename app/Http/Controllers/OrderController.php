@@ -12,9 +12,7 @@ use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
-    /**
-     * Felhasználó összes rendeléseit adja vissza
-     */
+    
     public function index(Request $request): JsonResponse
     {
         $user = Auth::user();
@@ -31,15 +29,13 @@ class OrderController extends Controller
         return response()->json($orders);
     }
 
-    /**
-     * Egy konkrét rendelés részletei
-     */
+    
     public function show(int $id): JsonResponse
     {
         $order = Order::with(['user', 'items.productOffer.product', 'items.productOffer.vendor', 'items.productOffer.platform'])
             ->findOrFail($id);
 
-        // Authentikáció: csak a saját rendeléseket lehet megtekinteni
+        
         if (Auth::check() && Auth::id() !== $order->user_id) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
@@ -47,22 +43,7 @@ class OrderController extends Controller
         return response()->json($order);
     }
 
-    /**
-     * Új rendelés létrehozása
-     *
-     * Request body:
-     * {
-     *   "items": [
-     *     {
-     *       "product_offer_id": 1,
-     *       "quantity": 1,
-     *       "price_at_purchase": 29.99
-     *     }
-     *   ],
-     *   "payment_method": "card",
-     *   "billing_*": "..."
-     * }
-     */
+    
     public function store(Request $request): JsonResponse
     {
         $user = Auth::user();
@@ -91,12 +72,12 @@ class OrderController extends Controller
         try {
             DB::beginTransaction();
 
-            // Rendelés létrehozása
+            
             $order = Order::create([
                 'user_id' => $user->id,
                 'email' => $user->email,
                 'payment_method' => $validated['payment_method'],
-                'total_amount' => 0, // majd kiszámítjuk
+                'total_amount' => 0, 
                 'status' => 'pending',
                 'currency' => 'USD',
                 'billing_name' => $validated['billing_name'],
@@ -113,16 +94,16 @@ class OrderController extends Controller
 
             $totalPrice = 0;
 
-            // OrderItems létrehozása
+            
             foreach ($validated['items'] as $itemData) {
                 $offer = ProductOffer::findOrFail($itemData['product_offer_id']);
 
-                // Készlet ellenőrzés
+                
                 if ($offer->stock < $itemData['quantity']) {
                     throw new \Exception('Nincs elegendő készlet: ' . $offer->product->name);
                 }
 
-                // OrderItem létrehozása
+                
                 OrderItem::create([
                     'order_id' => $order->id,
                     'product_offer_id' => $offer->id,
@@ -132,11 +113,11 @@ class OrderController extends Controller
 
                 $totalPrice += $offer->price * $itemData['quantity'];
 
-                // Készlet csökkentése
+                
                 $offer->decrement('stock', $itemData['quantity']);
             }
 
-            // Teljes ár frissítése
+            
             $order->update(['total_amount' => $totalPrice]);
 
             DB::commit();
@@ -151,9 +132,7 @@ class OrderController extends Controller
         }
     }
 
-    /**
-     * Rendelés státusza frissítése (admin csak)
-     */
+    
     public function updateStatus(int $id, Request $request): JsonResponse
     {
         $order = Order::findOrFail($id);
@@ -167,15 +146,13 @@ class OrderController extends Controller
         return response()->json($order);
     }
 
-    /**
-     * OrderItem részletei (pl. aktiválási kulcs)
-     */
+    
     public function getItem(int $orderId, int $itemId): JsonResponse
     {
         $order = Order::findOrFail($orderId);
         $item = $order->items()->with(['productOffer.product', 'productOffer.vendor'])->findOrFail($itemId);
 
-        // Authentikáció
+        
         if (Auth::check() && Auth::id() !== $order->user_id) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
@@ -183,9 +160,7 @@ class OrderController extends Controller
         return response()->json($item);
     }
 
-    /**
-     * Aktiválási kulcs vagy fiók adatok hozzáadása
-     */
+    
     public function addLicenseKey(int $orderId, int $itemId, Request $request): JsonResponse
     {
         $order = Order::findOrFail($orderId);

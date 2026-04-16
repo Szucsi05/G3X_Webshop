@@ -74,7 +74,7 @@
 
     @include('partials.site-footer')
 
-    <!-- JS -->
+
     <script>
     function addToCart(productId) {
         fetch(`/cart/add/${productId}`, {

@@ -8,14 +8,12 @@ use Illuminate\Http\JsonResponse;
 
 class CategoryController extends Controller
 {
-    /**
-     * Az összes kategóriát adja vissza
-     */
+    
     public function index(Request $request): JsonResponse
     {
         $query = Category::query();
 
-        // Keresés név alapján
+        
         if ($request->has('search')) {
             $search = $request->input('search');
             $query->where('name', 'like', "%{$search}%");
@@ -26,9 +24,7 @@ class CategoryController extends Controller
         return response()->json($categories);
     }
 
-    /**
-     * Egy konkrét kategória részletei
-     */
+    
     public function show(int $id): JsonResponse
     {
         $category = Category::findOrFail($id);
@@ -36,9 +32,7 @@ class CategoryController extends Controller
         return response()->json($category);
     }
 
-    /**
-     * Új kategória létrehozása
-     */
+    
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
@@ -51,9 +45,7 @@ class CategoryController extends Controller
         return response()->json($category, 201);
     }
 
-    /**
-     * Kategória módosítása
-     */
+    
     public function update(int $id, Request $request): JsonResponse
     {
         $category = Category::findOrFail($id);
@@ -68,9 +60,7 @@ class CategoryController extends Controller
         return response()->json($category);
     }
 
-    /**
-     * Kategória törlése
-     */
+    
     public function destroy(int $id): JsonResponse
     {
         $category = Category::findOrFail($id);

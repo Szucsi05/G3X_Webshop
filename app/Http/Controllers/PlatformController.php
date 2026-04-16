@@ -8,14 +8,12 @@ use Illuminate\Http\JsonResponse;
 
 class PlatformController extends Controller
 {
-    /**
-     * Az összes platformot adja vissza
-     */
+    
     public function index(Request $request): JsonResponse
     {
         $query = Platform::query();
 
-        // Keresés név alapján
+        
         if ($request->has('search')) {
             $search = $request->input('search');
             $query->where('name', 'like', "%{$search}%");
@@ -26,9 +24,7 @@ class PlatformController extends Controller
         return response()->json($platforms);
     }
 
-    /**
-     * Egy konkrét platform részletei
-     */
+    
     public function show(int $id): JsonResponse
     {
         $platform = Platform::findOrFail($id);
@@ -36,9 +32,7 @@ class PlatformController extends Controller
         return response()->json($platform);
     }
 
-    /**
-     * Új platform létrehozása
-     */
+    
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
@@ -51,9 +45,7 @@ class PlatformController extends Controller
         return response()->json($platform, 201);
     }
 
-    /**
-     * Platform módosítása
-     */
+    
     public function update(int $id, Request $request): JsonResponse
     {
         $platform = Platform::findOrFail($id);
@@ -68,9 +60,7 @@ class PlatformController extends Controller
         return response()->json($platform);
     }
 
-    /**
-     * Platform törlése
-     */
+    
     public function destroy(int $id): JsonResponse
     {
         $platform = Platform::findOrFail($id);

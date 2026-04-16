@@ -8,26 +8,24 @@ use Illuminate\Http\JsonResponse;
 
 class VendorController extends Controller
 {
-    /**
-     * Az összes szállítót adja vissza
-     */
+    
     public function index(Request $request): JsonResponse
     {
         $query = Vendor::query();
 
-        // Szűrés státusza alapján
+        
         if ($request->has('status')) {
             $query->where('status', $request->input('status'));
         }
 
-        // Keresés név alapján
+        
         if ($request->has('search')) {
             $search = $request->input('search');
             $query->where('name', 'like', "%{$search}%")
                   ->orWhere('email', 'like', "%{$search}%");
         }
 
-        // Rendezés
+        
         $sort_by = $request->input('sort_by', 'rating');
         $sort_order = $request->input('sort_order', 'desc');
 
@@ -40,9 +38,7 @@ class VendorController extends Controller
         return response()->json($vendors);
     }
 
-    /**
-     * Egy konkrét szállító részletei
-     */
+    
     public function show(int $id): JsonResponse
     {
         $vendor = Vendor::with('productOffers')->findOrFail($id);
@@ -50,9 +46,7 @@ class VendorController extends Controller
         return response()->json($vendor);
     }
 
-    /**
-     * Új szállító létrehozása (admin csak)
-     */
+    
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
@@ -65,16 +59,14 @@ class VendorController extends Controller
         ]);
 
         $validated['status'] = $validated['status'] ?? 'active';
-        $validated['rating'] = 5.0; // Alapértelmezett értékelés
+        $validated['rating'] = 5.0; 
 
         $vendor = Vendor::create($validated);
 
         return response()->json($vendor, 201);
     }
 
-    /**
-     * Szállító módosítása
-     */
+    
     public function update(int $id, Request $request): JsonResponse
     {
         $vendor = Vendor::findOrFail($id);
@@ -94,9 +86,7 @@ class VendorController extends Controller
         return response()->json($vendor);
     }
 
-    /**
-     * Szállító törlése
-     */
+    
     public function destroy(int $id): JsonResponse
     {
         $vendor = Vendor::findOrFail($id);

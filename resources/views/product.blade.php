@@ -30,7 +30,7 @@
             const lastSearchUrl = localStorage.getItem('lastSearchUrl');
             const lastFilterUrl = localStorage.getItem('lastFilterUrl');
             const backLink = document.getElementById('back-link');
-            
+
             if (lastSearchUrl) {
                 backLink.href = lastSearchUrl;
                 backLink.innerHTML = '<img src="{{ asset('icons/green_left_arrow.png') }}" alt="Back" class="icon-18"> <span class="back-link-label">Back to Search</span>';
@@ -53,7 +53,7 @@
                 </div>
             </div>
 
-            <!-- Termékinformáció -->
+
             <div class="product-info-section">
                 <h1>{{ $product->name }}</h1>
 
@@ -173,9 +173,8 @@
         </div>
     </div>
 
-    <!-- JS -->
+
     <script>
-    // Add to cart - per offer basis
     function addToCart(event) {
         event.preventDefault();
         const button = event.target.closest('button');
@@ -193,12 +192,10 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Update badge
                 const badge = document.getElementById('cart-badge');
                 badge.textContent = data.cart_count;
                 badge.style.display = 'inline';
-                
-                // Pulse animation
+
                 badge.style.animation = 'none';
                 setTimeout(() => {
                     badge.style.animation = 'badge-pulse 0.3s ease-in-out';

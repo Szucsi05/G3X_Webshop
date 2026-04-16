@@ -243,7 +243,7 @@
     border: 1px solid #00ff99;
 }
 
-/* Extra small devices (phones, 600px and down) */
+
 @media only screen and (max-width: 600px) {
     .orders-tabs,
     .order-header,
@@ -268,14 +268,14 @@
     }
 }
 
-/* Small devices (portrait tablets and large phones, 600px and up) */
+
 @media only screen and (min-width: 600px) {
     .orders-tabs {
         flex-wrap: wrap;
     }
 }
 
-/* Medium devices (landscape tablets, 768px and up) */
+
 @media only screen and (min-width: 768px) {
     .orders-tabs {
         flex-direction: row;
@@ -287,6 +287,6 @@
     }
 }
 
-/* Extra large devices (large laptops and desktops, 1200px and up) */
+
 @media only screen and (min-width: 1200px) {
 }

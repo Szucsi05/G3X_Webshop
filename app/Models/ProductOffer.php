@@ -23,41 +23,31 @@ class ProductOffer extends Model
         'price' => 'decimal:2',
     ];
 
-    /**
-     * Az ajánlathoz tartozó terméket adja vissza
-     */
+    
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
     }
 
-    /**
-     * Az ajánlathoz tartozó eladót adja vissza
-     */
+    
     public function vendor(): BelongsTo
     {
         return $this->belongsTo(Vendor::class);
     }
 
-    /**
-     * Az ajánlathoz tartozó platformot adja vissza
-     */
+    
     public function platform(): BelongsTo
     {
         return $this->belongsTo(Platform::class);
     }
 
-    /**
-     * Erre az ajánlatra vonatkozó rendelési tételek
-     */
+    
     public function orderItems(): HasMany
     {
         return $this->hasMany(OrderItem::class);
     }
 
-    /**
-     * A legalacsonyabb ár (scope)
-     */
+    
     public static function scopeLowestPrice($query, $productId)
     {
         return $query->where('product_id', $productId)
@@ -65,9 +55,7 @@ class ProductOffer extends Model
             ->orderBy('price', 'asc');
     }
 
-    /**
-     * Elérhető ajánlatok (scope)
-     */
+    
     public static function scopeAvailable($query)
     {
         return $query->where('status', 'active')

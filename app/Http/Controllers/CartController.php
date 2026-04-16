@@ -28,7 +28,7 @@ class CartController extends Controller
         }
 
         $cart = session()->get('cart', []);
-        $cartKey = 'offer_' . $id; // Unique per product offer
+        $cartKey = 'offer_' . $id; 
 
         if (isset($cart[$cartKey])) {
             $cart[$cartKey]['quantity']++;
@@ -47,7 +47,7 @@ class CartController extends Controller
 
         session()->put('cart', $cart);
         
-        // Sync cart to database if user is authenticated
+        
         if (Auth::check()) {
             Auth::user()->update(['cart_data' => $cart]);
         }
@@ -66,7 +66,7 @@ class CartController extends Controller
             session()->put('cart', $cart);
         }
         
-        // Sync cart to database if user is authenticated
+        
         if (Auth::check()) {
             Auth::user()->update(['cart_data' => $cart]);
         }
@@ -88,7 +88,7 @@ class CartController extends Controller
             session()->put('cart', $cart);
         }
         
-        // Sync cart to database if user is authenticated
+        
         if (Auth::check()) {
             Auth::user()->update(['cart_data' => $cart]);
         }
@@ -104,7 +104,7 @@ class CartController extends Controller
 
     public function checkout(Request $request)
     {
-        // Ha GET kérés, irányítsd a fizetési módok kiválasztásához
+        
         if ($request->isMethod('get')) {
             return redirect()->route('checkout.payment');
         }
@@ -118,12 +118,12 @@ class CartController extends Controller
             return redirect('/')->with('error', 'Your cart is empty.');
         }
 
-        // Calculate total
+        
         $total = array_sum(array_map(function($item) {
             return $item['price'] * $item['quantity'];
         }, $cart));
 
-        // Get stored checkout details from session
+        
         $checkoutDetails = session()->get('checkout_details', []);
 
         return view('checkout', [
@@ -136,9 +136,9 @@ class CartController extends Controller
 
     public function showDetails()
     {
-        // Ellenőrizd, hogy bejelentkezve van-e a felhasználó
+        
         if (!Auth::check()) {
-            // Irányítsd a login oldalra checkout paraméterrel
+            
             return redirect()->route('login', ['from_checkout' => true])->with('info', 'Please log in or register to continue to checkout.');
         }
 
@@ -147,7 +147,7 @@ class CartController extends Controller
             return redirect('/')->with('error', 'Your cart is empty.');
         }
 
-        // Calculate total
+        
         $total = array_sum(array_map(function($item) {
             return $item['price'] * $item['quantity'];
         }, $cart));
@@ -164,7 +164,7 @@ class CartController extends Controller
             'account_type' => 'required|in:personal,company',
         ]);
 
-        // Validate billing data based on account type
+        
         if ($request->account_type === 'personal') {
             $validated += $request->validate([
                 'billing_name_personal' => 'required|string',
@@ -188,10 +188,10 @@ class CartController extends Controller
             ]);
         }
 
-        // Store in session
+        
         session()->put('checkout_details', $validated);
 
-        // Redirect to checkout (payment method selection)
+        
         return view('checkout-payment-method');
     }
 
@@ -211,13 +211,13 @@ class CartController extends Controller
             'payment_method' => 'required|string|in:card,paypal,google_pay,apple_pay',
         ];
 
-        // Validáció függ a kártya forrásától
+        
         if ($request->input('payment_method') === 'card') {
             if ($cardSource === 'saved') {
-                // Mentett kártya: csak CVC kell
+                
                 $rules['card_cvc_saved'] = 'required|string|regex:/^\d{3}$/';
             } else {
-                // Új kártya: összes mező
+                
                 $rules['card_number'] = 'required|regex:/^\d{4} \d{4} \d{4} \d{4}$/';
                 $rules['card_expiry'] = 'required|regex:/^\d{2}\/\d{2}$/';
                 $rules['card_cvc'] = 'required|regex:/^\d{3}$/';
@@ -242,7 +242,7 @@ class CartController extends Controller
             return redirect('/')->with('error', 'Your cart is empty.');
         }
 
-        // Calculate total
+        
         $total = array_sum(array_map(function($item) {
             return $item['price'] * $item['quantity'];
         }, $cart));
@@ -289,13 +289,13 @@ class CartController extends Controller
             }
         });
 
-        // Clear cart from session and database
+        
         session()->forget('cart');
         session()->forget('checkout_details');
         
         if (Auth::check()) {
-            // Clear cart data from database too, so when user logs out and logs back in,
-            // they don't get the old cart items merged
+            
+            
             Auth::user()->update(['cart_data' => null]);
         }
 

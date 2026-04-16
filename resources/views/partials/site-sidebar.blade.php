@@ -9,10 +9,12 @@
 <div id="sidebar-overlay" class="sidebar-overlay" onclick="closeSidebar()"></div>
 
 <div id="sidebar" class="sidebar" aria-hidden="true">
-    <button class="close-btn" type="button" aria-label="Close categories" onclick="closeSidebar()">
-        <img src="{{ asset('icons/x.png') }}" alt="Close" class="close-btn-icon">
-    </button>
-    <h3>Categories</h3>
+    <div class="sidebar-header">
+        <h3>Categories</h3>
+        <button class="close-btn" type="button" aria-label="Close categories" onclick="closeSidebar()">
+            <img src="{{ asset('icons/x.png') }}" alt="Close" class="close-btn-icon">
+        </button>
+    </div>
     <ul>
         <li><a href="{{ route('filter.show', $pcSlug) }}" onclick="{{ $sidebarOnclick }}"><img src="{{ asset('icons/pc_category.png') }}" alt="PC Games" class="icon-18"> PC Games</a></li>
         <li><a href="{{ route('filter.show', $consoleSlug) }}" onclick="{{ $sidebarOnclick }}"><img src="{{ asset('icons/console_category.png') }}" alt="Console Games" class="icon-18"> Console Games</a></li>

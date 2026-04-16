@@ -15,7 +15,7 @@ class ProductApiController extends Controller
         $apiToken = config('app.api_token') ?? env('API_TOKEN');
 
         if (! $apiToken) {
-            return true; // If not configured, allow (for development).
+            return true; 
         }
 
         $token = $request->header('X-API-TOKEN') ?: $request->query('api_token');
@@ -66,7 +66,7 @@ class ProductApiController extends Controller
             'release_year' => ['nullable', 'integer'],
         ]);
 
-        // NOTE: Prices are now managed through ProductOffers, not directly on Products
+        
         $product = Product::create($data);
 
         return response()->json($product, 201);
@@ -90,7 +90,7 @@ class ProductApiController extends Controller
             'release_year' => ['nullable', 'integer'],
         ]);
 
-        // NOTE: Prices are managed through ProductOffers, not directly on Products
+        
         $product->update($data);
 
         return response()->json($product);

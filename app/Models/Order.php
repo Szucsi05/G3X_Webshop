@@ -27,25 +27,19 @@ class Order extends Model
         'account_type',
     ];
 
-    /**
-     * Rendelés felhasználója
-     */
+    
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    /**
-     * Rendelés tételei (order_items)
-     */
+    
     public function items(): HasMany
     {
         return $this->hasMany(OrderItem::class);
     }
 
-    /**
-     * Összes termék ajánlat a rendelésben (hasManyThrough-on keresztül)
-     */
+    
     public function productOffers()
     {
         return $this->hasManyThrough(ProductOffer::class, OrderItem::class);

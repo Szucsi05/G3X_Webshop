@@ -21,33 +21,25 @@ class OrderItem extends Model
         'account_details' => 'array',
     ];
 
-    /**
-     * A rendeléshez tartozó tétel
-     */
+    
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
     }
 
-    /**
-     * Az ajánlathoz tartozó terméket adja vissza
-     */
+    
     public function productOffer(): BelongsTo
     {
         return $this->belongsTo(ProductOffer::class);
     }
 
-    /**
-     * Rövidítés: direkten a terméket adja vissza
-     */
+    
     public function product()
     {
         return $this->productOffer->product();
     }
 
-    /**
-     * Rövidítés: direkten az eladót adja vissza
-     */
+    
     public function vendor()
     {
         return $this->productOffer->vendor();

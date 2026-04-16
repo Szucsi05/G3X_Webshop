@@ -31,7 +31,7 @@ class ProductController extends Controller
             });
         }
 
-        $products = $productsQuery->paginate(28)->withQueryString();
+        $products = $productsQuery->paginate(20)->withQueryString();
 
         return view('search', compact('products', 'query'));
     }

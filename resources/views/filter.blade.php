@@ -37,7 +37,7 @@
             </span>
         </div>
 
-        <!-- Category Filter Buttons -->
+
         <div class="category-filter">
             <a href="{{ route('filter.show') }}" class="category-btn {{ !$category ? 'active' : '' }}">
                 <img src="{{ asset('icons/all_category.png') }}" alt="All" class="icon-18"> All
@@ -56,7 +56,7 @@
             </a>
         </div>
 
-        <!-- Products Grid -->
+
         <div class="products-grid" id="products-grid">
             @if($products->count() > 0)
                 @foreach($products as $product)

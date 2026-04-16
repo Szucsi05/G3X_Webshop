@@ -49,7 +49,7 @@
 
         <div class="licenses-section">
             <h2 class="licenses-section-title">Your Activation Keys</h2>
-            
+
             @foreach($licenses as $index => $license)
                 <div class="license-card">
                     <div class="license-product">{{ $license['name'] }}</div>

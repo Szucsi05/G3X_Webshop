@@ -50,7 +50,7 @@
 
         <div class="licenses-section">
             <h2 class="order-detail-section-title">Ordered Products</h2>
-            
+
             @if($order->items && $order->items->count() > 0)
                 @foreach($order->items as $item)
                     <div class="license-card">
@@ -68,7 +68,7 @@
 
         <div class="licenses-section">
             <h2 class="order-detail-section-title">Activation Keys</h2>
-            
+
             @if($order->items && $order->items->count() > 0)
                 @foreach($order->items as $item)
                     @if($item->license_key)

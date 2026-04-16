@@ -120,25 +120,21 @@
     @include('partials.site-sidebar')
 
     <script>
-    // Card number formatting
     document.addEventListener('DOMContentLoaded', function() {
         const cardInput = document.querySelector('input[name="card_number"]');
         if (cardInput) {
             cardInput.addEventListener('input', function(e) {
                 let value = e.target.value.replace(/\s/g, '');
-                // Max 16 digits
                 value = value.substring(0, 16);
                 let formatted = value.match(/.{1,4}/g)?.join(' ') || value;
                 e.target.value = formatted;
             });
         }
 
-        // Expiry date formatting
         const expiryInput = document.querySelector('input[name="card_expiry"]');
         if (expiryInput) {
             expiryInput.addEventListener('input', function(e) {
                 let value = e.target.value.replace(/\D/g, '');
-                // Max 4 digits (MMYY)
                 value = value.substring(0, 4);
                 if (value.length >= 2) {
                     value = value.substring(0, 2) + '/' + value.substring(2, 4);
@@ -147,7 +143,6 @@
             });
         }
 
-        // CVC validation (max 3 digits)
         const cvcInput = document.querySelector('input[name="card_cvc"]');
         if (cvcInput) {
             cvcInput.addEventListener('input', function(e) {
@@ -155,7 +150,6 @@
             });
         }
 
-        // Postal code validation (max 4 digits)
         const postalInput = document.querySelector('input[name="postal_code"]');
         if (postalInput) {
             postalInput.addEventListener('input', function(e) {
@@ -163,8 +157,6 @@
             });
         }
 
-        // Card source toggle (saved vs new)
-        // Removed - no longer using saved cards
     });
     </script>
     @include('partials.site-footer')

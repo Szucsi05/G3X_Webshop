@@ -8,14 +8,11 @@
   </defs>
   <rect width="400" height="400" fill="url(#grad1)"/>
   
-  <!-- Box outline -->
   <rect x="80" y="80" width="240" height="240" fill="none" stroke="#00ff99" stroke-width="3" rx="10"/>
   
-  <!-- Product icon -->
   <circle cx="200" cy="150" r="40" fill="#00ff99"/>
   <path d="M 200 180 L 160 220 L 240 220 Z" fill="#00ff99"/>
   
-  <!-- Text -->
   <text x="200" y="290" font-family="Arial" font-size="24" text-anchor="middle" fill="#00ff99" font-weight="bold">G3X</text>
   <text x="200" y="320" font-family="Arial" font-size="14" text-anchor="middle" fill="#888888">Termék Kép</text>
 </svg>

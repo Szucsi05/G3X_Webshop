@@ -1,4 +1,4 @@
-/* FORMS */
+
 .form-group {
     margin-bottom: 15px;
 }
@@ -47,7 +47,7 @@
     flex: 1;
 }
 
-/* BUTTONS */
+
 .nav-btn {
     color: #fff;
     text-decoration: none;
@@ -106,7 +106,7 @@
     box-shadow: 0 4px 12px rgba(0, 204, 136, 0.4);
 }
 
-/* HERO */
+
 .hero {
     padding: 48px var(--page-gutter) 48px;
     text-align: center;
@@ -125,7 +125,7 @@
     color: #aaa;
 }
 
-/* CONTENT SECTIONS */
+
 .cards-section {
     padding: 20px var(--page-gutter);
     background: #0b1c2c;
@@ -262,7 +262,7 @@
     text-align: center;
 }
 
-/* TABLES */
+
 .sellers-table {
     width: 100%;
     table-layout: auto;
@@ -323,7 +323,7 @@
     animation: badge-pulse 0.3s ease-in-out;
 }
 
-/* Extra small devices (phones, 600px and down) */
+
 @media only screen and (max-width: 600px) {
     .hero {
         padding-top: 36px;
@@ -380,7 +380,7 @@
     }
 }
 
-/* Small devices (portrait tablets and large phones, 600px and up) */
+
 @media only screen and (min-width: 600px) {
     .products-grid {
         grid-template-columns: 1fr;
@@ -392,14 +392,14 @@
     }
 }
 
-/* Medium devices (landscape tablets, 768px and up) */
+
 @media only screen and (min-width: 768px) {
     .products-grid {
         grid-template-columns: repeat(2, minmax(270px, 270px));
     }
 }
 
-/* Large devices (laptops/desktops, 992px and up) */
+
 @media only screen and (min-width: 992px) {
     .products-grid {
         grid-template-columns: repeat(2, minmax(270px, 270px));
@@ -413,7 +413,7 @@
     }
 }
 
-/* Extra large devices (large laptops and desktops, 1200px and up) */
+
 @media only screen and (min-width: 1200px) {
     .products-grid {
         grid-template-columns: repeat(4, minmax(270px, 270px));

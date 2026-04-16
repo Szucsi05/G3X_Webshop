@@ -60,21 +60,17 @@
 
     @include('partials.site-sidebar')
 
-    <!-- JS -->
+
     <script>
     function selectPaymentMethod(method, element) {
-        // Remove active class from all cards
         document.querySelectorAll('.payment-method-card').forEach(card => {
             card.classList.remove('active');
         });
-        
-        // Add active class to selected card
+
         element.classList.add('active');
-        
-        // Set hidden input
+
         document.getElementById('payment_method').value = method;
-        
-        // Enable button
+
         document.getElementById('continue-btn').disabled = false;
     }
     </script>

@@ -9,9 +9,7 @@ use Illuminate\Database\Seeder;
 
 class ProductSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
+    
     public function run(): void
     {
         $products = $this->getProducts();
@@ -29,7 +27,7 @@ class ProductSeeder extends Seeder
 
         $products = [];
 
-        // Game variants from images
+        
         $gameVariants = [
             'ac_valhalla' => [
                 'pc' => ["Assassin's Creed Valhalla (PC)", 'ac_valhalla.jpg'],
@@ -270,7 +268,7 @@ class ProductSeeder extends Seeder
             ],
         ];
 
-        // Create game products
+        
         foreach ($gameVariants as $baseKey => $variants) {
             foreach ($variants as $platform => $data) {
                 [$name, $image] = $data;
@@ -284,7 +282,7 @@ class ProductSeeder extends Seeder
             }
         }
 
-        // Software
+        
         $softwareData = [
             ['Norton', 'Norton.jpg', 'Biztonságos vírusvédelmi szoftver'],
             ['Backup', 'backup.jpg', 'Automatikus adatmentő szoftver'],
@@ -303,7 +301,7 @@ class ProductSeeder extends Seeder
             ];
         }
 
-        // Subscriptions
+        
         $subscriptionData = [
             ['Netflix', 'netflix.jpg', 'Streaming szolgáltatás filmekhez és sorozatokhoz'],
             ['Spotify', 'spotify.jpg', 'Zenei streaming szolgáltatás'],

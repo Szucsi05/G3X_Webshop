@@ -12,9 +12,7 @@ class Platform extends Model
         'description',
     ];
 
-    /**
-     * Platformon elérhető ajánlatok
-     */
+    
     public function offers(): HasMany
     {
         return $this->hasMany(ProductOffer::class);

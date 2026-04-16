@@ -155,7 +155,7 @@
     box-shadow: 0 8px 20px rgba(0, 255, 153, 0.3);
 }
 
-/* Extra small devices (phones, 600px and down) */
+
 @media only screen and (max-width: 600px) {
     .settings-form {
         padding: 20px 16px;
@@ -172,7 +172,7 @@
     }
 }
 
-/* Medium devices (landscape tablets, 768px and up) */
+
 @media only screen and (min-width: 768px) {
     .settings-tabs {
         flex-direction: row;
@@ -180,6 +180,6 @@
     }
 }
 
-/* Extra large devices (large laptops and desktops, 1200px and up) */
+
 @media only screen and (min-width: 1200px) {
 }

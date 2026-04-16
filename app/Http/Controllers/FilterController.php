@@ -48,7 +48,7 @@ class FilterController extends Controller
             $categoryLabel = 'All Games';
         }
 
-        $products = $productsQuery->paginate(28)->withQueryString();
+        $products = $productsQuery->paginate(20)->withQueryString();
 
         return view('filter', compact('products', 'category', 'categoryLabel'));
     }

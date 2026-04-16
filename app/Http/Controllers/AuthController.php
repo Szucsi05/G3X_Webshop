@@ -23,7 +23,7 @@ class AuthController extends Controller
             'password' => 'required|string|min:8|confirmed',
         ]);
 
-        // Mentsd el az aktuális session kosárat, mielőtt létrehozod az usert
+        
         $sessionCart = session()->has('cart') ? session()->get('cart') : [];
 
         $user = User::create([
@@ -32,36 +32,36 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        // Automatikus bejelentkeztetés
+        
         Auth::login($user);
         $request->session()->regenerate();
 
-        // Merge: session kosár + user mentett kosár (ha van)
+        
         $mergedCart = $sessionCart;
         if ($user->cart_data && is_array($user->cart_data)) {
             foreach ($user->cart_data as $id => $item) {
                 if (isset($mergedCart[$id])) {
-                    // Ha már benne van, add össze a mennyiséget
+                    
                     $mergedCart[$id]['quantity'] += $item['quantity'];
                 } else {
-                    // Ha nincs benne, add hozzá
+                    
                     $mergedCart[$id] = $item;
                 }
             }
         }
         
-        // Session kosár frissítése
+        
         session()->put('cart', $mergedCart);
         
-        // Felhasználó kosárának frissítése
+        
         $user->update(['cart_data' => $mergedCart]);
 
-        // Ha checkout-ból érkezik és van kosár, szamlázási adatokra
+        
         if (($request->query('from_checkout') || $request->input('from_checkout')) && !empty($mergedCart)) {
             return redirect()->route('checkout.details')->with('success', 'Registration and sign-in completed successfully.');
         }
 
-        // Egyébként a főoldalra
+        
         return redirect('/')->with('success', 'Registration and sign-in completed successfully.');
     }
 
@@ -70,7 +70,7 @@ class AuthController extends Controller
         return view('auth.login_new');
     }
 
-    // API login - returns X-API-TOKEN
+    
     public function apiLogin(Request $request)
     {
         $request->validate([
@@ -78,7 +78,7 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
-        // Keressük az usert username vagy email alapján
+        
         $user = User::where('username', $request->username)
                     ->orWhere('email', $request->username)
                     ->first();
@@ -87,7 +87,7 @@ class AuthController extends Controller
             return response()->json(['message' => 'Invalid username or password'], 401);
         }
 
-        // Generate a simple token for API access
+        
         $apiToken = env('API_TOKEN') ?? 'test-api-token-' . hash('sha256', $user->id . time());
 
         return response()->json([
@@ -111,34 +111,34 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
             
-            // Mentsd el az aktuális session kosárat
+            
             $sessionCart = session()->has('cart') ? session()->get('cart') : [];
             
-            // Töltsd be a felhasználó mentett kosárját
+            
             $user = Auth::user();
             $mergedCart = $sessionCart;
             
             if ($user && $user->cart_data && is_array($user->cart_data)) {
                 foreach ($user->cart_data as $id => $item) {
                     if (isset($mergedCart[$id])) {
-                        // Ha már benne van, add össze a mennyiséget
+                        
                         $mergedCart[$id]['quantity'] += $item['quantity'];
                     } else {
-                        // Ha nincs benne, add hozzá
+                        
                         $mergedCart[$id] = $item;
                     }
                 }
             }
             
-            // Session kosár frissítése
+            
             session()->put('cart', $mergedCart);
             
-            // Felhasználó kosárának frissítése
+            
             if ($user) {
                 $user->update(['cart_data' => $mergedCart]);
             }
             
-            // Ha checkout-ból érkezik és van kosár, szamlázási adatokra
+            
             if (($request->query('from_checkout') || $request->input('from_checkout')) && !empty($mergedCart)) {
                 return redirect()->route('checkout.details')->with('success', 'Signed in successfully.');
             }
