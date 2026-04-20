@@ -12,6 +12,23 @@ use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
+    protected function validateApiToken(Request $request): bool
+    {
+        $apiToken = config('app.api_token') ?? env('API_TOKEN');
+
+        if (! $apiToken) {
+            return true; 
+        }
+
+        $token = $request->header('X-API-TOKEN') ?: $request->query('api_token');
+
+        return is_string($token) && hash_equals($apiToken, $token);
+    }
+
+    protected function abortUnauthorized(): void
+    {
+        abort(response()->json(['message' => 'Unauthorized'], 401));
+    }
     
     public function index(Request $request): JsonResponse
     {
@@ -174,4 +191,24 @@ class OrderController extends Controller
 
         return response()->json($item);
     }
+
+    
+    public function getAllOrders(Request $request): JsonResponse
+    {
+        if (! $this->validateApiToken($request)) {
+            $this->abortUnauthorized();
+        }
+
+        $orders = Order::with([
+            'user',
+            'items.productOffer.product',
+            'items.productOffer.vendor',
+            'items.productOffer.platform'
+        ])
+        ->orderBy('created_at', 'desc')
+        ->paginate(15);
+
+        return response()->json($orders);
+    }
 }
+

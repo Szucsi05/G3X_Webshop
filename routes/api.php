@@ -53,6 +53,8 @@ Route::prefix('v1')->group(function () {
  
     Route::get('/vendors/{vendorId}/offers', [ProductOfferController::class, 'byVendor']);
 
+    
+    Route::get('/orders/all', [OrderController::class, 'getAllOrders']);
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('/orders', [OrderController::class, 'index']);
