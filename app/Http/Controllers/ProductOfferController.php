@@ -106,7 +106,6 @@ class ProductOfferController extends Controller
             'vendor_id' => 'required|exists:vendors,id',
             'platform_id' => 'required|exists:platforms,id',
             'price' => 'required|numeric|min:0',
-            'stock' => 'required|integer|min:0',
             'region' => 'nullable|string',
             'delivery_type' => 'required|in:key,account,gift,physical',
             'status' => 'in:active,inactive,out_of_stock',

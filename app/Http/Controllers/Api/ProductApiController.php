@@ -7,9 +7,12 @@ use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class ProductApiController extends Controller
 {
+    protected const PLATFORM_TYPES = ['pc', 'ps4', 'ps5', 'xbox', 'nintendo'];
+
     protected function validateApiToken(Request $request): bool
     {
         $apiToken = config('app.api_token') ?? env('API_TOKEN');
@@ -23,15 +26,15 @@ class ProductApiController extends Controller
         return is_string($token) && hash_equals($apiToken, $token);
     }
 
-    protected function abortUnauthorized(): void
+    protected function abortUnauthorized(): JsonResponse
     {
-        abort(response()->json(['message' => 'Unauthorized'], 401));
+        return response()->json(['message' => 'Unauthorized'], 401);
     }
 
     public function index(Request $request): JsonResponse
     {
         if (! $this->validateApiToken($request)) {
-            $this->abortUnauthorized();
+            return $this->abortUnauthorized();
         }
 
         $products = Product::orderBy('id', 'desc')->get();
@@ -42,7 +45,7 @@ class ProductApiController extends Controller
     public function show(Request $request, int $id): JsonResponse
     {
         if (! $this->validateApiToken($request)) {
-            $this->abortUnauthorized();
+            return $this->abortUnauthorized();
         }
 
         $product = Product::findOrFail($id);
@@ -52,18 +55,17 @@ class ProductApiController extends Controller
 
     public function store(Request $request): JsonResponse
     {
+        
         if (! $this->validateApiToken($request)) {
-            $this->abortUnauthorized();
+            return $this->abortUnauthorized();
         }
 
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'image' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
-            'platform' => ['nullable', 'string', 'max:255'],
-            'genre' => ['nullable', 'string', 'max:255'],
-            'category' => ['nullable', 'string', 'max:255'],
-            'release_year' => ['nullable', 'integer'],
+            'platform_type' => ['nullable', 'string', 'in:' . implode(',', self::PLATFORM_TYPES)],
+            'category_id' => ['nullable', 'integer', 'exists:categories,id'],
         ]);
 
         
@@ -75,7 +77,7 @@ class ProductApiController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         if (! $this->validateApiToken($request)) {
-            $this->abortUnauthorized();
+            return $this->abortUnauthorized();
         }
 
         $product = Product::findOrFail($id);
@@ -84,10 +86,8 @@ class ProductApiController extends Controller
             'name' => ['sometimes', 'required', 'string', 'max:255'],
             'image' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
-            'platform' => ['nullable', 'string', 'max:255'],
-            'genre' => ['nullable', 'string', 'max:255'],
-            'category' => ['nullable', 'string', 'max:255'],
-            'release_year' => ['nullable', 'integer'],
+            'platform_type' => ['nullable', 'string', 'in:' . implode(',', self::PLATFORM_TYPES)],
+            'category_id' => ['nullable', 'integer', 'exists:categories,id'],
         ]);
 
         
@@ -99,7 +99,7 @@ class ProductApiController extends Controller
     public function destroy(Request $request, int $id): JsonResponse
     {
         if (! $this->validateApiToken($request)) {
-            $this->abortUnauthorized();
+            return $this->abortUnauthorized();
         }
 
         $product = Product::findOrFail($id);
