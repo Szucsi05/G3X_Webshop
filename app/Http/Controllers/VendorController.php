@@ -53,7 +53,7 @@ class VendorController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:vendors,email',
             'description' => 'nullable|string',
-            'website' => 'nullable|url',
+            'website' => 'nullable|string',
             'logo_url' => 'nullable|url',
             'status' => 'in:active,inactive,suspended',
         ]);
